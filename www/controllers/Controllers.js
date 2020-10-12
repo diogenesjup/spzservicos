@@ -1,6 +1,6 @@
 class App {
 
-    constructor(appId, appName, appVersion, appOs, ambiente, token) {
+    constructor(appId, appName, appVersion, appOs, ambiente, token, tokenSms) {
 
         this.appId = appId;
         this.appName = appName;
@@ -10,23 +10,25 @@ class App {
         this.views = new Views();
         this.sessao = new Sessao();
         this.models = new Models();
+        this.helpers = new Helpers();
 
         if(ambiente=="HOMOLOGACAO"){
              
-            this.urlDom = "http://127.0.0.1:8080/app-starter/app/www/";
-            this.urlApi = "http://127.0.0.1:8080/app-starter/api/";
-            this.urlCdn = "http://127.0.0.1:8080/app-starter/cdn/";
+            this.urlDom = "http://127.0.0.1:8080/services-keys/public_html/app/app/www/";
+            this.urlApi = "http://127.0.0.1:8080/services-keys/public_html/app/api/";
+            this.urlCdn = "http://127.0.0.1:8080/services-keys/public_html/app/cdn/";
 
         }
         if(ambiente=="PRODUCAO"){
 
-            this.urlDom = "http://127.0.0.1:8080/app-starter/app/www/";
-            this.urlApi = "http://127.0.0.1:8080/app-starter/api/";
-            this.urlCdn = "http://127.0.0.1:8080/app-starter/cdn/";
+            this.urlDom = "https://servicekeys.diogenesjunior.com.br/app/www/";
+            this.urlApi = "https://servicekeys.diogenesjunior.com.br/api/";
+            this.urlCdn = "https://servicekeys.diogenesjunior.com.br/cdn/";
 
         }
 
         this.token = token;
+        this.tokenSms = tokenSms;
         
     }
     
@@ -60,11 +62,33 @@ class App {
     }
 
     login(idUsuario,emailUusario,dadosUsuario){
+   
         this.sessao.logarUsuario(idUsuario,emailUusario,dadosUsuario);
+   
+    }
+
+    verificarCodigoSms(){
+
+        this.views.viewCodigoSms();
+
+    }
+
+    procVerificarSms(){
+        
+       this.models.verificarCodigoSms(); 
+
     }
     
+    procLoginSms(){
+
+        this.models.procLoginSms();
+   
+    }
+
     procLogin(){
+
         this.models.procLogin();
+   
     }
     
     procLogoff(){

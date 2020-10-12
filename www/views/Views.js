@@ -24,7 +24,7 @@ class Views{
             
                <div class="row view-principal" view-name="view-principal">
                   <div class="col-12 wow fadeInUp">
-                     <h1>App Starter</h1>
+                     <h1>Service Keys</h1>
                      <p>Esse é o nosso app base</p>
                      
 
@@ -98,42 +98,41 @@ class Views{
 
     viewLogin(){
 
-
             this._content.html(`
             
                <div class="row view-login" view-name="view-login">
                   <div class="col-12 wow fadeInRight" data-wow-delay="0.0s" data-wow-duration="0.3s">
-                     <h2>Login</h2>
-                     <p>Faça seu login na plataforma</p>
+                     <h2>Bem vindo</h2>
+                     <p>Service Keys</p>
                      
-                     <form method="post" action="javascript:void(0)" onsubmit="app.procLogin(event)">
+                     <form method="post" action="javascript:void(0)" onsubmit="app.procLoginSms(event)">
                         <div class="form-group">
-                           <label>Seu login</label>
-                           <input type="text" class="form-control" onclick="ativarFormularioFlutuante('#loginUsuario','Seu Login')" id="loginUsuario" placeholder="Seu e-mail ou usuário" required />
+                           <label>Seu celular com DDD</label>
+                           <input type="text" class="form-control" id="loginUsuario" placeholder="Digite o número do seu celular" required />
                         </div>
+                        
+
                         <div class="form-group">
-                           <label>Sua senha</label>
-                           <input type="password" class="form-control" id="loginSenha" placeholder="Sua senha de acesso" required />
-                        </div>
-                        <div class="form-group">
-                           <button class="btn btn-primary">
-                              Login
+                           <button class="btn btn-primary" id="btnViewLogin">
+                              Próximo
                            </button>
                         </div>
                         
                      </form>
+                     
+                     <!--
+                       <div class="form-group link-apoio text-center">
+                            <a href="javascript:void(0)" onclick="app.esqueciMinhaSenha()" title="Esqueci minha senha">
+                                Esqueci minha senha
+                            </a>
+                          </div>
 
-                     <div class="form-group link-apoio text-center">
-                          <a href="javascript:void(0)" onclick="app.esqueciMinhaSenha()" title="Esqueci minha senha">
-                              Esqueci minha senha
-                          </a>
-                        </div>
-
-                     <div class="form-group link-apoio text-center">
-                          <a href="javascript:void(0)" onclick="app.cadastro()" title="Criar uma conta">
-                              Criar uma conta
-                          </a>
-                        </div>
+                       <div class="form-group link-apoio text-center">
+                            <a href="javascript:void(0)" onclick="app.cadastro()" title="Criar uma conta">
+                                Criar uma conta
+                            </a>
+                       </div>
+                     -->
 
                   </div>
                </div>
@@ -143,7 +142,113 @@ class Views{
             $("footer").hide();
 
             this.animarTransicao();
+            app.helpers.carregarMascaras();
         
+    }
+
+    viewCodigoSms(){
+
+             this._content.html(`
+            
+               <div class="row view-login" view-name="view-login">
+                  <div class="col-12 wow fadeInRight" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                     <h2>AppStarter</h2>
+                     <p>Insira o código que recebeu por SMS</p>
+                     
+                     <form method="post" action="javascript:void(0)" onsubmit="app.procVerificarSms(event)">
+                        <div class="form-group">
+                           <label>Ele irá chegar em até 2 minutos</label>
+                           <input type="text" class="form-control form-control-lg text-center" id="codigoSms" placeholder="Digite os cinco digitos que recebeu via SMS" required />
+                        </div>
+                        
+                        <div class="form-group">
+                           <button class="btn btn-primary text-center" id="btnConfirmarCodigo">
+                              Confirmar código
+                           </button>
+                        </div>
+                        
+                     </form>
+                     
+                       <div class="form-group link-apoio text-center">
+                            <a href="javascript:void(0)" onclick="app.viewLoginEmailSenha()" title="Prefiro entrar usando e-mail e senha">
+                                Prefiro entrar usando e-mail e senha
+                            </a>
+                          </div>
+
+                       <!--
+                         <div class="form-group link-apoio text-center">
+                            <a href="javascript:void(0)" onclick="app.cadastro()" title="Criar uma conta">
+                                Criar uma conta
+                            </a>
+                         </div>
+                       -->
+                     
+
+                  </div>
+               </div>
+            
+            `);
+
+
+            $("footer").hide();
+
+            this.animarTransicao();
+            app.helpers.carregarMascaras();
+
+    }
+
+    viewLoginEmailSenha(){
+
+      this._content.html(`
+            
+               <div class="row view-login" view-name="view-login">
+                  <div class="col-12 wow fadeInRight" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                     <h2>Login</h2>
+                     <p>Entrar com o seu e-mail e senha</p>
+                     
+                     <form method="post" action="javascript:void(0)" onsubmit="app.procLogin(event)">
+                       
+                        <div class="form-group">
+                           <label>Seu email de cadastro</label>
+                           <input type="text" class="form-control" id="loginUsuario" placeholder="Seu e-mail ou usuário" required />
+                        </div>
+
+                        <div class="form-group">
+                           <label>Senha</label>
+                           <input type="password" class="form-control" id="loginSenha" placeholder="Sua senha cadastrada" required />
+                        </div>
+                        
+                        <div class="form-group">
+                           <button class="btn btn-primary" id="btnLoginEmailSenha">
+                              Login
+                           </button>
+                        </div>
+                        
+                     </form>
+                     
+                     
+                       <div class="form-group link-apoio text-center">
+                            <a href="javascript:void(0)" onclick="app.esqueciMinhaSenha()" title="Esqueci minha senha">
+                                Esqueci minha senha
+                            </a>
+                          </div>
+                     <!--
+                       <div class="form-group link-apoio text-center">
+                            <a href="javascript:void(0)" onclick="app.cadastro()" title="Criar uma conta">
+                                Criar uma conta
+                            </a>
+                       </div>
+                     -->
+
+                  </div>
+               </div>
+            
+            `);
+
+            $("footer").hide();
+
+            this.animarTransicao();
+
     }
 
 
@@ -170,7 +275,7 @@ class Views{
                            <input type="password" id="cadastroSenha" class="form-control" placeholder="Sua senha de acesso" required />
                         </div>
                         <div class="form-group">
-                           <button class="btn btn-primary">
+                           <button class="btn btn-primary" id="btnViewCadastro">
                               Cadastrar
                            </button>
                         </div>
@@ -210,14 +315,14 @@ class Views{
                         </div>
                        
                         <div class="form-group">
-                           <button class="btn btn-primary">
+                           <button class="btn btn-primary" id="btnViewResetarSenha">
                               Resetar senha
                            </button>
                         </div>
                      </form>
 
                      <div class="form-group link-apoio text-center">
-                          <a href="javascript:void(0)" onclick="app.viewLogin()" title="Cancelar reset de senha">
+                          <a href="javascript:void(0)" onclick="app.viewLoginEmailSenha()" title="Cancelar reset de senha">
                               Cancelar
                           </a>
                         </div>

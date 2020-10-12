@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/diogenesjup/WelbeApp-Ionic-AppFlow.git"
+    "url": "git+hhttps://github.com/diogenesjup/servicekeys-app.git"
   },
   "keywords": [
-    "tepping"
+    "servicekeys"
   ],
   "author": "Service Keys Tecnologia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/diogenesjup/WelbeApp/issues"
+    "url": "https://github.com/diogenesjup/servicekeys-app/issues"
   },
-  "homepage": "https://github.com/diogenesjup/WelbeApp-Ionic-AppFlow#readme"
+  "homepage": "https://github.com/diogenesjup/servicekeys-app#readme"
 }

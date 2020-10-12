@@ -29,21 +29,68 @@ class Models{
               // FINAL CHAMADA AJAX
 
     }
-
+    
     // PROC LOGIN
     procLogin(){
        
        event.preventDefault();
 
        var loginUsuario = $("#loginUsuario").val();
-	     var loginSenha   = $("#loginSenha").val();
+       var loginSenha = $("#loginSenha").val();
+
+            // INICIO CHAMADA AJAX
+              var request = $.ajax({
+
+                  method: "POST",
+                  url: app.urlApi+"login.php",
+                  data:{token:app.token,tokenSms:app.tokenSms,loginUsuario:loginUsuario,loginSenha:loginSenha}
+              
+              })
+              request.done(function (dados) {            
+
+                  console.log("%c RETORNO DO LOGIN","background:#ff0000;color:#fff;");
+                  console.log(dados);
+
+                  var dadosUsuario = JSON.stringify(dados);
+                  
+                  if(dados.sucesso=="200"){
+                     
+                     localStorage.setItem("dadosUsuario",dadosUsuario);
+                     app.login(dados.id,dados.email,dadosUsuario);
+
+                  
+                  }else{
+                     
+                     $(".form-control").val("");
+                     aviso("Oops! Login ou senha não encontrados","Verifique os dados inseridos e tente novamente!");
+                     
+                  }
+                  
+              });
+              request.fail(function (dados) {
+                     
+                   console.log("API NÃO DISPONÍVEL (procLogin)");
+                   console.log(dados);
+                   aviso("Oops! Algo deu errado","Nossos servidores estão passando por dificuldades técnicas, tente novamente em alguns minutos");
+
+              });
+              // FINAL CHAMADA AJAX
+
+    }
+
+    // PROC LOGIN SMS
+    procLoginSms(){
+       
+       event.preventDefault();
+
+       var loginUsuario = $("#loginUsuario").val();
 
 	          // INICIO CHAMADA AJAX
               var request = $.ajax({
 
                   method: "POST",
-                  url: app.urlApi+"login.php",
-                  data:{token:app.token,loginUsuario:loginUsuario,loginSenha:loginSenha}
+                  url: app.urlApi+"token-sms-login.php",
+                  data:{token:app.token,tokenSms:app.tokenSms,loginUsuario:loginUsuario}
               
               })
               request.done(function (dados) {            
@@ -56,19 +103,72 @@ class Models{
                   if(dados.sucesso=="200"){
                   	 
                   	 localStorage.setItem("dadosUsuario",dadosUsuario);
-                  	 app.login(dados.id,dados.email,dadosUsuario);
+                  	 //app.login(dados.id,dados.email,dadosUsuario);
+
+                     app.verificarCodigoSms();
                   
                   }else{
                      
-                     $(".form-control").val("");
-                     aviso("Oops! Login ou senha não encontrados","Verifique os dados inseridos e tente novamente!");
-                  
+                     //$(".form-control").val("");
+                     //aviso("Oops! Login ou senha não encontrados","Verifique os dados inseridos e tente novamente!");
+                     
+                     // SE O CELULAR NAO ESTIVER CADASTRADO
+                     // VAMOS DIRECIONAR O USUÁRIO PARA CONCLUIR O CADASTRO
+
+                     app.cadastro();
+
                   }
                   
               });
               request.fail(function (dados) {
                      
                    console.log("API NÃO DISPONÍVEL (procLogin)");
+                   console.log(dados);
+                   aviso("Oops! Algo deu errado","Nossos servidores estão passando por dificuldades técnicas, tente novamente em alguns minutos");
+
+              });
+              // FINAL CHAMADA AJAX
+
+    }
+
+    // VERIFICAR O CÓDIGO SMS ENVIADO PELO USUÁRIO
+    verificarCodigoSms(){
+
+      event.preventDefault();
+
+       var codigoSms = $("#codigoSms").val();
+
+              // INICIO CHAMADA AJAX
+              var request = $.ajax({
+
+                  method: "POST",
+                  url: app.urlApi+"verificar-sms.php",
+                  data:{token:app.token,codigoSms:codigoSms}
+              
+              })
+              request.done(function (dados) {            
+
+                  console.log("%c RETORNO DA VERIFICACAO DO CODIGO DE SMS","background:#ff0000;color:#fff;");
+                  console.log(dados);
+
+                  var dadosUsuario = JSON.stringify(dados);
+                  
+                  if(dados.sucesso=="200"){
+                     
+                     localStorage.setItem("dadosUsuario",dadosUsuario);
+                     app.login(dados.id,dados.email,dadosUsuario);
+                  
+                  }else{
+                     
+                     $(".form-control").val("");
+                     aviso("Oops! Código incorreto","Verifique o código recebido e tente novamente. Se ainda tiver dificuldades, tente entrar com o e-mail e senha.");
+                     
+                  }
+                  
+              });
+              request.fail(function (dados) {
+                     
+                   console.log("API NÃO DISPONÍVEL (verificarCodigoSms)");
                    console.log(dados);
                    aviso("Oops! Algo deu errado","Nossos servidores estão passando por dificuldades técnicas, tente novamente em alguns minutos");
 
