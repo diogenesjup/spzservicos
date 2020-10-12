@@ -1,0 +1,7 @@
+{
+  "name": "com.diogenesjunior.servicekeys",
+  "type": "custom",
+  "integrations": {
+    "cordova": {}
+  }
+}

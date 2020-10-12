@@ -1,0 +1,22 @@
+{
+  "name": "com.diogenesjunior.servicekeys",
+  "version": "1.0.0",
+  "description": "Serivce Keys",
+  "main": "index.html",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogenesjup/WelbeApp-Ionic-AppFlow.git"
+  },
+  "keywords": [
+    "tepping"
+  ],
+  "author": "Service Keys Tecnologia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diogenesjup/WelbeApp/issues"
+  },
+  "homepage": "https://github.com/diogenesjup/WelbeApp-Ionic-AppFlow#readme"
+}

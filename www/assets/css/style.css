@@ -1,0 +1,409 @@
+/*
+	DIOGENES JUNIOR
+	CONTATO@DIOGENESJUNIOR.COM.BR
+	
+*/
+
+/*---------------------------------
+	RESETS
+-----------------------------------*/
+
+html,body{
+    height: 100%;
+}
+body{
+	overflow-x: hidden;
+    background:#fff;
+}
+
+@media(max-width: 540px){
+  html,body{
+    max-width: 100% !important;
+    
+  }
+}
+
+/*---------------------------------
+	IMPORTS E CONSULTAS E MOBILE
+	
+XS = < 544px
+SM = > 544px
+MD = > 768px
+LG = > 992px
+XL = > 1200px
+
+CSS GRID
+-----------------------------------*/
+
+
+.wow {
+   visibility: hidden;
+}
+::selection { background: #757575; color: #fff; } ::-moz-selection { background: #757575; color: #fff; }
+
+
+.text-center{
+  text-align: center;
+}
+
+.text-right{
+  text-align: right;
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+}
+
+.row{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+
+/*---------------------------------
+	HEADER
+-----------------------------------*/
+header{
+  position:fixed;
+  display:block;
+  background:#f2f2f2;
+  z-index: 9999;
+  left:0;
+  top:0;
+  width: 100%;
+  height: 60px;
+}
+
+/*---------------------------------
+  FOOTER / NAVEGACAO
+-----------------------------------*/
+footer{
+  position: fixed;
+  display:block;
+  background: #f2f2f2;
+  z-index:9999;
+  left:0;
+  bottom:0;
+  height:54px;
+  width:100%;
+  text-align: center;
+  padding-top: 12px;
+}
+
+footer a{
+  color:#000;
+  text-decoration: none !important;
+  font-size: 12.5px;
+}
+
+/*---------------------------------
+  CONTENT
+-----------------------------------*/
+section#content {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: calc(100% - 114px);
+    /* min-height: 100%; */
+    padding-bottom: 0px;
+    margin-top: 0;
+    top: 60px;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+section#content::-webkit-scrollbar-track {
+    background-color: #F4F4F4;
+}
+section#content::-webkit-scrollbar {
+    width: 0px;
+    background: #F4F4F4;
+}
+section#content::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+
+
+section#content .view-principal{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+
+section#content .view-2{
+  background: #f2f2f2;
+  min-height: 600px;
+}
+
+
+section#content .view-3{
+  background: #ccc;
+  min-height: 600px;
+}
+
+/*---------------------------------
+  AVISOS
+-----------------------------------*/
+.modal-avisos{
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left: 0;
+  z-index: 99999;
+  background: rgba(000,000,000,0.35);
+  -webkit-transition:all 300ms ease;-moz-transition:all 300ms ease;transition:all 300ms ease;
+}
+
+.modal-avisos .aviso{
+  position: absolute;
+  display: block;
+  bottom: -300%;
+  height: auto;
+  min-height: 30%;
+  max-height: 92%;
+  overflow-y: scroll;
+  background: #fff;
+  left: 0;
+  width: 100%;
+  z-index: 999991;
+  padding: 20px;
+  -webkit-transition:all 300ms ease;-moz-transition:all 300ms ease;transition:all 300ms ease;
+}
+.modal-avisos .aviso::-webkit-scrollbar-track {
+          background-color: #F4F4F4;
+      }
+.modal-avisos .aviso::-webkit-scrollbar {
+          width: 0px;
+          background: #F4F4F4;
+      }
+.modal-avisos .aviso::-webkit-scrollbar-thumb {
+          background: #ccc;
+      }
+
+
+
+
+.modal-avisos .aviso h3{
+   color: #012169;
+   margin-top: 1px;
+   margin-bottom: 12px;
+   line-height: 1.15em;
+   font-size: 20px;
+}
+
+
+.modal-avisos .aviso p{
+   color: #292929;
+   font-size: 13px;
+   line-height: 19px;
+   margin-bottom: 6px;
+   padding-left: 0px;
+}
+
+.modal-avisos .btn-primary{
+  height: 42px;
+  width: 100%;
+  display: block;
+}
+
+
+/*---------------------------------
+  CONFIRMAÇÃO
+-----------------------------------*/
+.modal-confirmacao{
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top:0;
+  left: 0;
+  z-index: 999999;
+  background: rgba(000,000,000,0.35);
+  -webkit-transition:all 300ms ease;-moz-transition:all 300ms ease;transition:all 300ms ease;
+}
+
+.modal-confirmacao .confirmacao{
+  position: absolute;
+  display: block;
+  bottom: -300%;
+  height: auto;
+  min-height: 30%;
+  max-height: 92%;
+  overflow-y: scroll;
+  background: #fff;
+  left: 0;
+  width: 100%;
+  z-index: 999991;
+  padding: 20px;
+  -webkit-transition:all 300ms ease;-moz-transition:all 300ms ease;transition:all 300ms ease;
+}
+.modal-confirmacao .confirmacao::-webkit-scrollbar-track {
+          background-color: #F4F4F4;
+      }
+.modal-confirmacao .confirmacao::-webkit-scrollbar {
+          width: 1px;
+          background: #F4F4F4;
+      }
+.modal-confirmacao .confirmacao::-webkit-scrollbar-thumb {
+          background: #ccc;
+      }
+
+
+
+
+.modal-confirmacao .confirmacao h3{
+   font-family: 'Muli', sans-serif;
+   font-weight: 600;
+   color: #012169;
+   margin-top: 1px;
+   margin-bottom: 12px;
+   line-height: 1.15em;
+   font-size: 20px;
+}
+
+.modal-confirmacao .confirmacao .col{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.modal-confirmacao .confirmacao .col .btn-primary{
+  height: 42px;
+  width: 100%;
+}
+
+.modal-confirmacao .confirmacao .col .btn-default{
+    height: 42px;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+
+/*---------------------------------
+  EMPRT STATES OU O FAMOSO PLACEHOLDER PRE LOAD
+-----------------------------------*/
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
+
+.linear-background {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 1000px 104px;
+    height: 61px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+.inter-draw{
+  background: #FFF;
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  top: 100px;
+}
+.inter-right--top{
+  background: #FFF;
+  width: 100%;
+  height: 20px;
+  position: absolute;
+  top: 20px;
+  left: 100px;
+}
+.inter-right--bottom{
+  background: #FFF;
+  width: 100%;
+  height: 50px;
+  position: absolute;
+  top: 60px;
+  left: 100px;
+}
+.inter-crop{
+  background: #FFF;
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 100px;
+}
+
+
+/*---------------------------------
+  INPUT FLUTUANTE
+-----------------------------------*/
+
+.input-flutuante-acessibilidade{
+    position: fixed;
+    display: none;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    background: #fff;
+    z-index: 9999999;
+    bottom: 0px;
+    border-top: 1px solid #012169;
+    color: #537e87;
+    padding-left: 20px;
+    padding-top: 3px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.06);
+}
+
+.input-flutuante-acessibilidade label{
+    color: #000;
+    text-transform: uppercase;
+    font-size: 12px;
+    padding-top: 3px;
+}
+
+
+.input-flutuante-acessibilidade .form-control{
+    padding-left: 0px;
+    padding-top: 0px;
+    font-size: 15px;
+    color: #000;
+    border: none;
+    height: auto;
+    width: 292px;
+    border-bottom: 1px solid #000;
+    border-radius: 0px;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.input-flutuante-acessibilidade button.btn-default,
+.input-flutuante-acessibilidade button.btn-default:hover,
+.input-flutuante-acessibilidade button.btn-default:active{
+    width: auto !important;
+    background: none !important;
+    color: #000 !important;
+    outline: none !important;
+    border: none !important;
+    float: right !important;
+    margin-top: -38px !important;
+    text-transform: uppercase !important;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    box-shadow: none !important;
+}
+
+
+
+/*---------------------------------
+  OUTROS ESTILOS
+-----------------------------------*/
+
+
+
