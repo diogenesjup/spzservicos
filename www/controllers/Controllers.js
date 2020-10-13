@@ -109,6 +109,10 @@ class App {
         this.views.desativarTodosMenus();
     }
 
+    viewLoginEmailSenha(){
+        this.views.viewLoginEmailSenha();
+    }
+
     procCadastro(){
         this.models.procCadastro();
     }

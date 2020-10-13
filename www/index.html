@@ -70,13 +70,36 @@ ysyss
 <!-- DROPDOWN -->
 <link href="assets/css/bootstrap-dropdownhover.css" rel="stylesheet">
 
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;500;700&family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+<!--
+  font-family: 'Barlow', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+-->
+
+
 </head>
 <body>
 
 
     <!-- HEADER -->
     <header>
-        
+        <div class="row">
+          <!-- LOGO -->
+          <div class="col-9 logo">
+             <a href="" title="SERVICEKEYS">
+                <img src="assets/images/logo.svg" alt="SERVICEKEYS LOGO" />
+             </a>
+          </div>
+          <!-- LOGO -->
+          <!-- MENU BAR -->
+          <div class="col-3 menu-bar-toggle">
+             <a href="#" title="Abrir o menu">
+               <img src="assets/images/menu-bar.svg" alt="Abrir o menu">
+             </a>
+          </div>
+          <!-- MENU BAR -->
+        </div>
     </header>
     <!-- HEADER -->
 
@@ -93,17 +116,20 @@ ysyss
         <div class="row">
             <div class="col menu-1">
                 <a href="javascript:void(0)" title="view 1" onclick="app.inicio()">
-                    View 1
+                    <img src="assets/images/home.svg" alt="Home" />
+                    Home
                 </a>
             </div>
             <div class="col menu-2">
                 <a href="javascript:void(0)" title="view 1" onclick="app.view2()">
-                    View 2
+                    <img src="assets/images/favicon.svg" alt="Meus Serviços" />
+                    Serviços
                 </a>
             </div>
             <div class="col menu-3">
                 <a href="javascript:void(0)" title="view 1" onclick="app.view3()">
-                    View 3
+                    <img src="assets/images/alertas.svg" alt="Alertas" />
+                    Alertas
                 </a>
             </div>
         </div>

@@ -60,7 +60,7 @@ class Models{
 
                   
                   }else{
-                     
+
                      $(".form-control").val("");
                      aviso("Oops! Login ou senha não encontrados","Verifique os dados inseridos e tente novamente!");
                      
@@ -114,6 +114,9 @@ class Models{
                      
                      // SE O CELULAR NAO ESTIVER CADASTRADO
                      // VAMOS DIRECIONAR O USUÁRIO PARA CONCLUIR O CADASTRO
+                     
+                     // SALVAR O CELULAR PARA O CADASTRO
+                     localStorage.setItem("celularCadastro",dados.celular);
 
                      app.cadastro();
 
@@ -186,13 +189,14 @@ class Models{
       var cadastroNome = $("#cadastroNome").val();
       var cadastroEmail = $("#cadastroEmail").val();
       var cadastroSenha = $("#cadastroSenha").val();
+      var cadastroCelular = $("#cadastroCelular").val();
 
               // INICIO CHAMADA AJAX
               var request = $.ajax({
 
                   method: "POST",
                   url: app.urlApi+"cadastro.php",
-                  data:{token:app.token,cadastroNome:cadastroNome,cadastroEmail:cadastroEmail,cadastroSenha:cadastroSenha}
+                  data:{token:app.token,cadastroCelular:cadastroCelular,cadastroNome:cadastroNome,cadastroEmail:cadastroEmail,cadastroSenha:cadastroSenha}
               
               })
               request.done(function (dados) {            

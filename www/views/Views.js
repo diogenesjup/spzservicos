@@ -22,32 +22,63 @@ class Views{
 
             this._content.html(`
             
-               <div class="row view-principal" view-name="view-principal">
-                  <div class="col-12 wow fadeInUp">
-                     <h1>Service Keys</h1>
-                     <p>Esse é o nosso app base</p>
+               <div class="row view-dashboard" view-name="view-dashboard">
+                  <div class="col-12 wow fadeInUp" data-wow-delay="0.0s" data-wow-duration="0.3s">
                      
+                      <!-- BUSCA PRINCIPAL -->
+                     <div class="input-group busca-principal">
+                        <input type="text" class="form-control" placeholder="Do que você está precisando hoje?" aria-label="Do que você está precisando hoje?" aria-describedby="busca-principal">
+                        <div class="input-group-append">
+                          <span class="input-group-text" id="busca-principal">
+                            <img src="assets/images/search.svg" alt="Busca">
+                          </span>
+                        </div>
+                      </div>
+                     <!-- BUSCA PRINCIPAL -->
 
-                     <!-- EMPTY STATE -->
-                    <div class="linear-background">
-                        <div class="inter-draw"></div>
-                        <div class="inter-crop"></div>
-                        <div class="inter-right--top"></div>
-                        <div class="inter-right--bottom"></div>
-                    </div>
-                    <div class="linear-background">
-                        <div class="inter-draw"></div>
-                        <div class="inter-crop"></div>
-                        <div class="inter-right--top"></div>
-                        <div class="inter-right--bottom"></div>
-                    </div>
-                    <div class="linear-background">
-                        <div class="inter-draw"></div>
-                        <div class="inter-crop"></div>
-                        <div class="inter-right--top"></div>
-                        <div class="inter-right--bottom"></div>
-                    </div>
-                    <!-- EMPTY STATE -->
+                     <h2>
+                       Receba orçamentos de profissionais <b>qualificados</b> próximos a você!
+                     </h2>
+
+                     <nav>
+                       <ul>
+                         <li>
+                           <a href="#" title="Limpeza geral">
+                             Limpeza geral <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                         <li>
+                           <a href="#" title="Passadoria">
+                             Passadoria <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                         <li>
+                           <a href="#" title="Lavagem">
+                             Lavagem <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                         <li>
+                           <a href="#" title="Janelas">
+                             Janelas <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                         <li>
+                           <a href="#" title="Organização">
+                             Organização <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                         <li>
+                           <a href="#" title="Cozinha">
+                             Cozinha <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                         <li>
+                           <a href="#" title="Quartos">
+                             Quartos <img src="assets/images/right.svg" alt="Ver mais">
+                           </a>
+                         </li>
+                       </ul>
+                     </nav>
 
 
                   </div>
@@ -57,7 +88,8 @@ class Views{
 
             this.animarTransicao();
 
-            $("footer").fadeIn();
+            //$("footer").fadeIn(); // TALVEZ O RODAPE SEJA APENAS PARA USUÁRIO COLABORADORES
+            $("header .menu-bar-toggle").fadeIn(500);
         
     }
 
@@ -102,8 +134,8 @@ class Views{
             
                <div class="row view-login" view-name="view-login">
                   <div class="col-12 wow fadeInRight" data-wow-delay="0.0s" data-wow-duration="0.3s">
-                     <h2>Bem vindo</h2>
-                     <p>Service Keys</p>
+                     <h2>Bem vindo,</h2>
+                     <p>Se identifique para entrar no aplicativo</p>
                      
                      <form method="post" action="javascript:void(0)" onsubmit="app.procLoginSms(event)">
                         <div class="form-group">
@@ -140,6 +172,7 @@ class Views{
             `);
 
             $("footer").hide();
+            $("header .menu-bar-toggle").hide();
 
             this.animarTransicao();
             app.helpers.carregarMascaras();
@@ -152,13 +185,13 @@ class Views{
             
                <div class="row view-login" view-name="view-login">
                   <div class="col-12 wow fadeInRight" data-wow-delay="0.0s" data-wow-duration="0.3s">
-                     <h2>AppStarter</h2>
+                     <h2>Service Keys</h2>
                      <p>Insira o código que recebeu por SMS</p>
                      
                      <form method="post" action="javascript:void(0)" onsubmit="app.procVerificarSms(event)">
                         <div class="form-group">
                            <label>Ele irá chegar em até 2 minutos</label>
-                           <input type="text" class="form-control form-control-lg text-center" id="codigoSms" placeholder="Digite os cinco digitos que recebeu via SMS" required />
+                           <input type="text" class="form-control text-center" id="codigoSms" placeholder="Digite os cinco digitos que recebeu via SMS" required />
                         </div>
                         
                         <div class="form-group">
@@ -262,6 +295,7 @@ class Views{
                      <p>Faça seu cadastro na plataforma</p>
                      
                      <form method="post" action="javascript:void(0)" onsubmit="app.procCadastro(event)">
+                        <input type="hidden" id="cadastroCelular" name="celularCadastro" value="${localStorage.getItem("celularCadastro")}" />
                         <div class="form-group">
                            <label>Seu Nome</label>
                            <input type="text" id="cadastroNome" onclick="ativarFormularioFlutuante('#cadastroNome','Seu nome completo')" class="form-control" placeholder="Seu nome completo" required />
