@@ -1,3 +1,19 @@
+           // GERENCIANET TOKEN
+           $gn.ready(function(checkout) {
+ 
+              var callback = function(error, response) {
+                if(error) {
+                  // Trata o erro ocorrido
+                  console.error(error);
+                } else {
+                  // Trata a resposta
+                  console.log(response);
+                }
+              }; 
+
+           });
+
+
             // COMO FAZER A CHAMADA NO FORMULÁRIO onSubmit="return ajaxSubmit(this);"
             var ajaxSubmit = function(form) {
                 // fetch where we want to submit the form to
@@ -66,7 +82,7 @@
               $(".modal-avisos .aviso h3").html(titulo);
               $(".modal-avisos .aviso p").html(mensagem+'<p style="padding-top:12px;padding-left:0px;"><button type="button" onclick="fecharAviso();" class="btn btn-primary">Ok</button></p>');
               
-              setTimeout("fecharAviso()",12000);
+              //setTimeout("fecharAviso()",12000);
 
 
             }
@@ -149,6 +165,14 @@ $(document).ready(function() {
     }
   });
 });
+
+// ABRIR URL`s EXTERNAS`
+function abrirUrl(url){
+
+  cordova.InAppBrowser.open(url, '_blank', 'location=yes,hidden=no,hardwareback=no');
+
+}
+
 
 
 

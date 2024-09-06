@@ -19,6 +19,13 @@ class Helpers {
 	    $("#loginUsuario").inputmask("(99) 9 9999-9999");
 	    $("#codigoSms").inputmask("9 9 9 9 9");
 
+        $("#pagtoCCNumero").inputmask("9999-9999-9999-9999");
+        $("#pagtoCCValidade").inputmask("99/99");
+        $("#pagtoBBNumeroCPF").inputmask("999.999.999-99");
+        $("#pagtoCCNumeroCPF").inputmask("999.999.999-99");
+
+  
+
 	}
     
   }

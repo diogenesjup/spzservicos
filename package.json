@@ -1,22 +1,36 @@
 {
-  "name": "com.diogenesjunior.servicekeys",
+  "name": "com.diogenesjunior.spzservicos",
   "version": "1.0.0",
-  "description": "Serivce Keys",
+  "description": "SPZ Serviços",
   "main": "index.html",
   "scripts": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git+hhttps://github.com/diogenesjup/servicekeys-app.git"
+    "url": "git+https://github.com/diogenesjup/spzservicos.git"
   },
   "keywords": [
-    "servicekeys"
+    "spzservicos"
   ],
-  "author": "Service Keys Tecnologia",
+  "author": "SPZ Serviços Tecnologia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/diogenesjup/servicekeys-app/issues"
+    "url": "https://github.com/diogenesjup/spzservicos/issues"
   },
-  "homepage": "https://github.com/diogenesjup/servicekeys-app#readme"
+  "homepage": "https://github.com/diogenesjup/spzservicos#readme",
+  "devDependencies": {
+    "cordova-android": "^13.0.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-ionic-webview": {}
+    }
+  }
 }
