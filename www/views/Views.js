@@ -2049,7 +2049,7 @@ class Views{
                      <form method="post" action="javascript:void(0)" onsubmit="app.procLoginSms(event)">
                         <div class="form-group">
                            <label>Seu celular com DDD</label>
-                           <input type="tell" class="form-control" id="loginUsuario" placeholder="Digite o número do seu celular" required />
+                           <input type="tel" class="form-control" id="loginUsuario" placeholder="Digite o número do seu celular" required />
                         </div>
                         
 
@@ -2100,7 +2100,7 @@ class Views{
                      <form method="post" action="javascript:void(0)" onsubmit="app.procVerificarSms(event)">
                         <div class="form-group">
                            <label>Ele irá chegar em até 2 minutos</label>
-                           <input type="tell" class="form-control text-center" id="codigoSms" placeholder="Digite os cinco digitos que recebeu via SMS" required />
+                           <input type="tel" class="form-control text-center" id="codigoSms" placeholder="Digite os cinco digitos que recebeu via SMS" required />
                         </div>
                         
                         <div class="form-group">
