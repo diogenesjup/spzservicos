@@ -312,7 +312,30 @@ function abrirUrl(url){
 
 
 
+function copiarCodigoPix(){
 
+  // Cria um elemento textarea temporário
+  var textArea = document.createElement("textarea");
+            
+  // Define o valor do textarea para o conteúdo do span
+  textArea.value = document.querySelector('#codigoPix').value;
+  
+  // Adiciona o textarea ao DOM
+  document.body.appendChild(textArea);
+  
+  // Seleciona o conteúdo do textarea
+  textArea.select();
+  
+  // Copia o texto selecionado para a área de transferência
+  document.execCommand('copy');
+  
+  // Remove o textarea do DOM
+  document.body.removeChild(textArea);
+  
+  // (Opcional) Mostra uma mensagem para o usuário
+  alert('Código copiado com sucesso!');
+
+}
 
 
 

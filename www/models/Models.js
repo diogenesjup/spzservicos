@@ -980,7 +980,7 @@ pacoteChaves(){
                                     <input class="form-check-input" type="radio" name="pacote" id="pacote${temp}" value="${n.qtd_chaves}" ${checked}>
                                     <label class="form-check-label" for="pacote${temp}">
                                       <img src="assets/images/simbolo.svg" alt="Comprar ${n.qtd_chaves} Chaves" />  
-                                      ${n.qtd_chaves} Chaves 
+                                      ${n.qtd_chaves} Keys 
                                       <small>À vista por R$ ${n.valor_blr.replace(".",",")}</small>
                                       <span>
                                         <d>ou em até 4X de</d>
@@ -1080,6 +1080,10 @@ selecaoPacoteDeChaves(pacoteEscolhido){
 
                         `);
 
+
+                        window.setTimeout(function(){
+                            console.log("Iniciando teste de parcelas");
+                            console.log(dados.pacotes);
                             // CARREGANDO PARCELAS
                             var j = 1;
 
@@ -1088,7 +1092,12 @@ selecaoPacoteDeChaves(pacoteEscolhido){
                                 var divisao = dados.pacotes[i].valor_blr / j;
                                 divisao = divisao.toFixed(2).replace(".",",");
 
-                                if(divisao>=5){
+                                console.log("DIVISAO: ");
+                                console.log(divisao);
+
+                                if(parseInt(divisao)>=5){
+
+                                  console.log("IMPRMINDO VALORES...");
 
                                   $("#pagtoCCParcelas").append(`
                                       <option value="${j}">${j}x de R$ ${divisao}</option>
@@ -1101,13 +1110,15 @@ selecaoPacoteDeChaves(pacoteEscolhido){
                             }// FINAL DO FOR DE PARCELAS
 
                             // CONTROLE DO VALOR MINIMO DE PARCELAS
-                            if(dados.pacotes[i].valor_blr<=5){
+                            if(parseInt(dados.pacotes[i].valor_blr)<=5){
 
                               $("#pagtoCCParcelas").append(`
                                       <option value="1">1x de R$ ${dados.pacotes[i].valor_blr}</option>
                                   `);
 
                             }
+
+                          },3000);
 
 
                     }
@@ -1181,7 +1192,7 @@ payBoleto(){
 
             if(xhr.status == 200) {
 
-              console.log("RETORNO PAGAMENTO BOLETO: ");
+              console.log("RETORNO PAGAMENTO PIX: ");
               //console.log(xhr.responseText);
               console.log(JSON.parse(xhr.responseText));
 

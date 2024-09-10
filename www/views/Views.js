@@ -544,7 +544,7 @@ class Views{
                      </h2>
                      
                      <p style="font-size: 13px;width:80%;margin-bottom:30px;">
-                       O saldo em chaves é o que você utiliza para desbloquear os orçamento dentro da plataforma. 
+                       O saldo <b>KEYS</b> é o que você utiliza para desbloquear os orçamento dentro da plataforma. 
                        Você pode comprar novos pacotes de chaves sempre que quiser:
                      </p>
 
@@ -553,8 +553,8 @@ class Views{
                      </p>
 
                      <p>
-                        <a href="javascript:void(0)" onclick="app.comprarChaves();" style="padding-top:6px;" class="btn btn-primary" title="Comprar chaves">
-                          COMPRAR CHAVES
+                        <a href="javascript:void(0)" onclick="app.comprarChaves();" style="padding-top:6px;" class="btn btn-primary" title="Comprar KEYS">
+                          COMPRAR KEYS
                         </a>
                      </p>
 
@@ -692,7 +692,7 @@ class Views{
                          <img src="assets/images/voltar-views.svg" alt="Voltar" />
                       </a> 
                       Comprar chaves</h2>
-                     <p>Pacote de chaves para você desbloquear anúncios dentro da plataforma</p>
+                     <p>Pacote de KEYS para você desbloquear anúncios dentro da plataforma</p>
 
                      
                      <form id="formPacoteSelecao" method="post" action="javascript:void(0)" onsubmit="app.selecaoPacoteCompra(event)">
@@ -715,6 +715,12 @@ class Views{
                                   COMPRAR SELECIONADO
                               </button> 
                            </div>
+
+                           <p>&nbsp;</p>
+                           <p>&nbsp;</p>
+                           <p>&nbsp;</p>
+                           <p>&nbsp;</p>
+                           <p>&nbsp;</p>
 
                      </form>
 
@@ -741,15 +747,14 @@ class Views{
                       <a href="javascript:void(0)" title="Voltar" onclick="app.comprarChaves();">
                          <img src="assets/images/voltar-views.svg" alt="Voltar" />
                       </a> 
-                      Comprar chaves</h2>
+                      Comprar Keys</h2>
                       <p>Você está comprando um pacote de chaves</p>
 
                            <div id="pacoteEscolhido"></div>
 
                            <h3 style="font-size:20px;">Como deseja realizar o pagamento?</h3>
                            <p>
-                             Você pode realizar o pagamento através de cartão de crédito (liberação imediata) ou
-                             através de boleto bancário (liberação de 1 a 3 dias úteis).
+                             Você pode realizar o pagamento através de cartão de crédito através de PIX.
                            </p>
 
                                  <!-- FORMAS DE PAGAMENTO -->
@@ -812,6 +817,7 @@ class Views{
                                                               <div class="col-12 form-group">
                                                                  <label>Parcelas</label>
                                                                  <select class="form-control" name="pagtoCCParcelas" id="pagtoCCParcelas">
+                                                                  
                                                                  </select>
                                                               </div>
                                                           </div>
@@ -948,6 +954,9 @@ class Views{
     
     dadosBoleto(dados){
 
+      const payload        = dados.payload;
+      const encodedPayload = encodeURIComponent(payload);
+
        this._content.html(`
             
                <div class="row view-comprar-chaves text-center confirmacao-boleto" view-name="view-2">
@@ -957,7 +966,7 @@ class Views{
                                   <a href="javascript:void(0)" title="Voltar" onclick="app.viewPrincipalProfissional();">
                                      <img src="assets/images/voltar-views.svg" alt="Voltar" />
                                   </a> 
-                                    Boleto gerado com sucesso!
+                                    PIX gerado com sucesso!
                                   </h2>
                                  <!--
                                  <h3 class="dados-boleto">
@@ -966,16 +975,37 @@ class Views{
                                      <small>vencimento: ${dados.dueDate}</small>
                                  </h3>
                                  -->
-                                  <p style="text-align:center">Suas chaves serão liberadas meditante confirmação do pagamento do boleto.</p>
-                                  <p style="text-align:center">
-                                    Acesse seu boleto diretamente<br>
-                                    <a href="javascript:void(0)" onclick="abrirUrl('${dados.invoiceUrl}');" title="clique para acessar o seu boleto" target="_system">
-                                       clicando nesse link
-                                    </a>
-                                  </p> 
-                                  <p>
-                                    Nós também enviamos um e-mail com o boleto.
-                                  </p>
+
+                                   <p style="text-align:center">Suas Keys serão liberadas meditante confirmação do pagamento do PIX.</p>
+
+                                   <p>
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodedPayload}" style="width: 80%;height: auto;margin: 20px;border-radius: 8px;" /> 
+                                   </p>
+                                   <div class="diogenes-form-group" style="position:relative;display:block;">
+                                        <textarea 
+                                            rows="5"
+                                            class="diogenes-form-control" 
+                                            id="codigoPix" 
+                                            style="background: #f8f8f8;width: 80%;border-radius: 8px;font-size: 13px;padding: 5px;"
+                                        >${payload}</textarea>
+                                    </div>
+                                    <p style="text-align:center">
+                                       <a href="" onclick="copiarCodigoPix()" style="color: #666;text-decoration: underline;display: block;padding-top: 12px;" title="Copiar código PIX">
+                                          Copiar código PIX
+                                       </a>
+                                    </p>
+
+                                  <!--
+                                    <p style="text-align:center">
+                                       Acesse seu boleto diretamente<br>
+                                       <a href="javascript:void(0)" onclick="abrirUrl('${dados.invoiceUrl}');" title="clique para acessar o seu boleto" target="_system">
+                                          clicando nesse link
+                                       </a>
+                                    </p> 
+                                    <p>
+                                       Nós também enviamos um e-mail com o boleto.
+                                    </p>
+                                  -->
 
                                  <p>&nbsp;</p>
                                  <p>&nbsp;</p>
@@ -1939,7 +1969,7 @@ class Views{
 
                                   <p>
                                     Tem alguma dúvida sobre como funciona a plataforma? Veja algumas perguntas e respostas que podem ser úteis. Você também
-                                    pode enviar um e-mail para <b>suporte@servicekeys.com.br</b>
+                                    pode enviar um e-mail para <b>suporte@spzservicos.com.br</b>
                                   </p>
                                   
 
