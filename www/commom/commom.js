@@ -339,3 +339,474 @@ function copiarCodigoPix(){
 
 
 
+function previewImagemAnuncio(){
+
+    // Correção: Use [0] para acessar o elemento DOM e obter o arquivo
+    const file = jQuery("#foto_destaque")[0].files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result; // Mostrar preview
+            jQuery("#previewAnuncio .capa-anuncio").css(`background`,`url('${e.target.result}') #f2f2f2 no-repeat`);
+              jQuery("#previewAnuncio .capa-anuncio").css(`background-size`,`cover`);
+              jQuery("#previewAnuncio .capa-anuncio").css(`background-position`,`center center`);
+        }
+        reader.readAsDataURL(file); // Converte a imagem para base64 para pré-visualização
+    } else {
+        preview.src = ''; // Caso não haja imagem
+    }
+
+    jQuery("#previewContainerId").html(`
+      
+      <p style="font-size:12px;text-align:center;">
+        Preview da imagem que será a capa do seu anúncio
+      </p>
+  
+  `);
+
+    const previewContainer = document.getElementById("previewContainerId");
+    const preview = document.createElement('img');
+    preview.style.maxWidth = '200px';
+    preview.style.marginTop = '10px';
+    previewContainer.appendChild(preview);
+
+    
+
+}
+
+
+
+
+// Função que faz a configuração e o envio do formulário
+function enviarFormulario(formId, fileInputId, previewContainerId) {
+
+  const form = document.getElementById(formId);
+  const fileInput = document.getElementById(fileInputId);
+  const previewContainer = document.getElementById(previewContainerId);
+  const preview = document.createElement('img');
+  preview.style.maxWidth = '200px';
+  preview.style.marginTop = '10px';
+  previewContainer.appendChild(preview);
+
+  // Validação do input para aceitar apenas imagens
+  fileInput.setAttribute('accept', 'image/*');
+
+  // Exibir preview da imagem
+  fileInput.addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+              preview.src = e.target.result; // Mostrar preview
+              
+          }
+          reader.readAsDataURL(file); // Converte a imagem para base64 para pré-visualização
+      } else {
+          preview.src = ''; // Caso não haja imagem
+      }
+  });
+
+  
+
+  // Adiciona o clique ao botão de submit do formulário
+  /*
+  form.querySelector('button[type="submit"]').addEventListener('click', function (event) {
+      event.preventDefault(); // Previne o envio padrão
+      processarEnvio(); // Chama a função de envio do formulário via AJAX
+  });
+  */
+  
+}
+
+
+// Função para limitar o texto ao máximo de 115 caracteres
+function limitarTexto(textarea, maxChars) {
+  if (textarea.value.length > maxChars) {
+      textarea.value = textarea.value.substring(0, maxChars);
+  }
+  atualizarContador();
+}
+function atualizarContador() {
+  const textarea = document.getElementById('descricao_anuncio');
+  const contador = document.getElementById('contadorCaracteres');
+  const maxChars = 115;
+
+  // Atualiza o texto do contador
+  contador.textContent = textarea.value.length + '/' + maxChars;
+}
+
+
+
+// Função para enviar o formulário via AJAX
+// processarEnvio('formNewAnuncio', 'foto_destaque', 'previewContainerId')
+function processarEnvio(formId, fileInputId, previewContainerId) {
+
+  jQuery("#botaoEnviarViaAjax").html(`Processando... Aguarde...`);
+
+  var titulo_anuncio          = jQuery("#titulo_anuncio").val();
+  var breve_descricao_anuncio = jQuery("#descricao_anuncio").val();
+  var celular_destino_anuncio = jQuery("#celular_destino_anuncio").val();
+
+  if(titulo_anuncio==""||titulo_anuncio==null||breve_descricao_anuncio==""||breve_descricao_anuncio==null||celular_destino_anuncio==""||celular_destino_anuncio==null){
+
+      jQuery("#botaoEnviarViaAjax").html(`Salvar anúncio`);
+      aviso("Oops! Campos não preenchidos!","Todos os campos são obrigatórios! Verifique as informações inseridas e tente novamente.");
+      return;
+
+  }
+
+  const form = document.getElementById(formId);
+  const fileInput = document.getElementById(fileInputId);
+  const previewContainer = document.getElementById(previewContainerId);
+
+  const formData = new FormData(form);
+  const file = fileInput.files[0];
+
+  if (file) {
+      const reader = new FileReader();
+
+      // Converte a imagem em base64 para envio ao servidor
+      reader.onloadend = function () {
+          const base64Image = reader.result;
+
+          formData.append('action', 'cadastrar_anuncio'); // Ação AJAX
+          
+          formData.append('id_usuario', localStorage.getItem("idUsuario")); // Dado AJAX
+          formData.append('titulo_anuncio', titulo_anuncio); // Dado AJAX
+          formData.append('breve_descricao_anuncio', breve_descricao_anuncio); // Dado AJAX
+          formData.append('celular_destino_anuncio', celular_destino_anuncio); // Dado AJAX
+
+          formData.append('foto_destaque_base64', base64Image);
+
+          console.log("Temos um preview");
+          console.log(base64Image);
+
+          // Aqui começa o envio via AJAX
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', app.urlApiAjax + 'admin-ajax.php', true);
+          xhr.onload = function () {
+              if (xhr.status === 200) {
+                
+                  aviso("Seu anúncio foi enviado!","O cadastro do seu anúncio foi um sucesso, <strong>mas lembre-se de ativá-lo</strong> para que os clientes possam visualizá-lo");
+                  console.log('Formulário enviado com sucesso');
+                  console.log(xhr.responseText); // Resposta do servidor
+                  
+                  // DIRECIONAR O USUÁRIO PARA VER TODOS OS ANÚNCIOS CADASTRADOS
+                  app.verTodosAnuncios();
+
+              } else {
+                  console.error('Erro ao enviar o formulário');
+                  jQuery("#botaoEnviarViaAjax").html(`Salvar anúncio`);
+                  aviso("Oops! Algo deu errado...","Não conseguimos processar a sua solicitação no momento, tente novamente em alguns minutos.");
+              }
+          };
+
+          xhr.send(formData); // Envia o formulário com a imagem em base64
+      };
+
+      reader.readAsDataURL(file); // Converte a imagem em base64
+  } else {
+      aviso("Oops! Algo deu errado...","Você precisa selecionar pelo menos uma imagem antes de salvar o seu anúncio.");
+      jQuery("#botaoEnviarViaAjax").html(`Salvar anúncio`);
+  }
+}
+
+
+
+function processarEnvioEdicao(formId, fileInputId, previewContainerId,idAnuncio) {
+
+  jQuery("#botaoEnviarViaAjax").html(`Processando... Aguarde...`);
+
+  var titulo_anuncio          = jQuery("#titulo_anuncio").val();
+  var breve_descricao_anuncio = jQuery("#descricao_anuncio").val();
+  var celular_destino_anuncio = jQuery("#celular_destino_anuncio").val();
+
+  if(titulo_anuncio==""||titulo_anuncio==null||breve_descricao_anuncio==""||breve_descricao_anuncio==null||celular_destino_anuncio==""||celular_destino_anuncio==null){
+
+      jQuery("#botaoEnviarViaAjax").html(`Atualizar anúncio`);
+      aviso("Oops! Campos não preenchidos!","Todos os campos são obrigatórios! Verifique as informações inseridas e tente novamente.");
+      return;
+
+  }
+
+  const form = document.getElementById(formId);
+  const fileInput = document.getElementById(fileInputId);
+  const previewContainer = document.getElementById(previewContainerId);
+
+  const formData = new FormData(form);
+  const file = fileInput.files[0];
+
+  if (file) {
+      const reader = new FileReader();
+
+      // Converte a imagem em base64 para envio ao servidor
+      reader.onloadend = function () {
+          const base64Image = reader.result;
+
+          formData.append('action', 'editar_anuncio'); // Ação AJAX
+          formData.append('id_anuncio', idAnuncio); // Dado AJAX
+          formData.append('id_usuario', localStorage.getItem("idUsuario")); // Dado AJAX
+          formData.append('titulo_anuncio', titulo_anuncio); // Dado AJAX
+          formData.append('breve_descricao_anuncio', breve_descricao_anuncio); // Dado AJAX
+          formData.append('celular_destino_anuncio', celular_destino_anuncio); // Dado AJAX
+
+          formData.append('foto_destaque_base64', base64Image);
+
+          console.log("Temos um preview");
+          console.log(base64Image);
+
+          // Aqui começa o envio via AJAX
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', app.urlApiAjax + 'admin-ajax.php', true);
+          xhr.onload = function () {
+              if (xhr.status === 200) {
+                
+                  aviso("Seu anúncio foi atualizado!","Atualizamos o seu anúncio com sucesso, <strong>mas lembre-se de ativá-lo</strong> para que os clientes possam visualizá-lo");
+                  console.log('Formulário enviado com sucesso');
+                  console.log(xhr.responseText); // Resposta do servidor
+                  
+                  // DIRECIONAR O USUÁRIO PARA VER TODOS OS ANÚNCIOS CADASTRADOS
+                  app.verTodosAnuncios();
+
+              } else {
+                  console.error('Erro ao enviar o formulário');
+                  jQuery("#botaoEnviarViaAjax").html(`Salvar anúncio`);
+                  aviso("Oops! Algo deu errado...","Não conseguimos processar a sua solicitação no momento, tente novamente em alguns minutos.");
+              }
+          };
+
+          xhr.send(formData); // Envia o formulário com a imagem em base64
+      };
+
+      reader.readAsDataURL(file); // Converte a imagem em base64
+  }else{
+
+          formData.append('action', 'editar_anuncio'); // Ação AJAX
+          formData.append('id_anuncio', idAnuncio); // Dado AJAX
+          formData.append('id_usuario', localStorage.getItem("idUsuario")); // Dado AJAX
+          formData.append('titulo_anuncio', titulo_anuncio); // Dado AJAX
+          formData.append('breve_descricao_anuncio', breve_descricao_anuncio); // Dado AJAX
+          formData.append('celular_destino_anuncio', celular_destino_anuncio); // Dado AJAX
+
+          
+          // Aqui começa o envio via AJAX
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', app.urlApiAjax + 'admin-ajax.php', true);
+          xhr.onload = function () {
+              if (xhr.status === 200) {
+                
+                  aviso("Seu anúncio foi atualizado!","Atualizamos o seu anúncio com sucesso, <strong>mas lembre-se de ativá-lo</strong> para que os clientes possam visualizá-lo");
+                  console.log('Formulário enviado com sucesso');
+                  console.log(xhr.responseText); // Resposta do servidor
+                  
+                  // DIRECIONAR O USUÁRIO PARA VER TODOS OS ANÚNCIOS CADASTRADOS
+                  app.verTodosAnuncios();
+
+              } else {
+                  console.error('Erro ao enviar o formulário');
+                  jQuery("#botaoEnviarViaAjax").html(`Salvar anúncio`);
+                  aviso("Oops! Algo deu errado...","Não conseguimos processar a sua solicitação no momento, tente novamente em alguns minutos.");
+              }
+          };
+
+          xhr.send(formData); // Envia o formulário com a imagem em base64
+
+  }
+
+}
+
+
+function anuncios(posicao){
+
+  var plano = posicao;
+  var tem   = 0;
+
+  var anuncios = JSON.parse(localStorage.getItem("anuncios"));
+
+  var anuncios_ativos = anuncios.anuncios.filter(function(anuncio) {
+      return anuncio.plano == posicao && anuncio.status_anuncio == "Ativado";
+  });
+
+
+
+
+  var html = ``;
+  var faca = `
+
+                     <!-- ANUNCIOS -->
+                     <div class="area-anuncios" id="areaAnuncios">
+                              <h1>Anúncios:</h1>
+
+                              <!-- ANUNCIO -->
+                              <div class="anuncio">
+                                 <div class="row">
+                                    <div class="col-8">
+                                          <h3>AC Elétrica e manutenção</h3>
+                                          <p>Aqui um pequeno texto de descrição sobre o anúnico</p>
+                                          <a href="" title="WhatsApp">
+                                             <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                          </a>
+                                    </div>
+                                    <div class="col-4" style="padding:0">
+                                       <div class="capa-anuncio" style="background:url('assets/images/3.jpg') #f2f2f2 no-repeat;background-size:cover;background-position:center center;">
+                                          <a href="" title="Clique para ir para o WhatsApp">
+                                             &nbsp;
+                                          </a>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- ANUNCIO -->
+
+                     </div>
+                     <!-- ANUNCIOS -->
+  
+  `;
+
+  if(plano=="1"){
+
+    anuncios_ativos.forEach(function(anuncio) {
+      if(anuncio.plano=='1'){
+        tem = 2;
+      html = `
+
+                     <!-- ANUNCIOS -->
+                     <div class="area-anuncios" id="areaAnuncios">
+                              <h1>Anúncios:</h1>
+
+                              <!-- ANUNCIO -->
+                              <div class="anuncio">
+                                 <div class="row">
+                                    <div class="col-8">
+                                          <h3>${anuncio.titulo}</h3>
+                                          <p>${anuncio.descricao}</p>
+                                          <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&phone=${anuncio.celular}');" title="WhatsApp">
+                                             <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                          </a>
+                                    </div>
+                                    <div class="col-4" style="padding:0">
+                                       <div class="capa-anuncio" style="background:url('${anuncio.capa}') #f2f2f2 no-repeat;background-size:cover;background-position:center center;">
+                                          <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&phone=${anuncio.celular}');" title="Clique para ir para o WhatsApp">
+                                             &nbsp;
+                                          </a>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- ANUNCIO -->
+
+                     </div>
+                     <!-- ANUNCIOS -->
+  
+            `;
+      }
+
+    });
+
+  }
+
+  if(tem==0){
+
+    anuncios_ativos.forEach(function(anuncio) {
+      if(anuncio.plano=='2'){
+        tem = 2;
+      html = `
+
+                     <!-- ANUNCIOS -->
+                     <div class="area-anuncios" id="areaAnuncios">
+                              <h1>Anúncios:</h1>
+
+                              <!-- ANUNCIO -->
+                              <div class="anuncio">
+                                 <div class="row">
+                                    <div class="col-8">
+                                          <h3>${anuncio.titulo}</h3>
+                                          <p>${anuncio.descricao}</p>
+                                          <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&phone=${anuncio.celular}');" title="WhatsApp">
+                                             <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                          </a>
+                                    </div>
+                                    <div class="col-4" style="padding:0">
+                                       <div class="capa-anuncio" style="background:url('${anuncio.capa}') #f2f2f2 no-repeat;background-size:cover;background-position:center center;">
+                                          <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&phone=${anuncio.celular}');" title="Clique para ir para o WhatsApp">
+                                             &nbsp;
+                                          </a>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- ANUNCIO -->
+
+                     </div>
+                     <!-- ANUNCIOS -->
+  
+            `;
+      }
+
+    });
+
+  }
+
+  
+  if(plano=="3"){
+
+    html = `
+
+                     <!-- ANUNCIOS -->
+                     <div class="area-anuncios" id="areaAnuncios">
+                              <h1>Anúncios:</h1>
+    
+    `;
+
+    anuncios_ativos.forEach(function(anuncio) {
+
+      if(anuncio.plano=='3'){
+
+          html = html + `
+
+                        
+
+                                  <!-- ANUNCIO -->
+                                  <div class="anuncio">
+                                    <div class="row">
+                                        <div class="col-8">
+                                              <h3>${anuncio.titulo}</h3>
+                                              <p>${anuncio.descricao}</p>
+                                              <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&phone=${anuncio.celular}');" title="WhatsApp">
+                                                <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                              </a>
+                                        </div>
+                                        <div class="col-4" style="padding:0">
+                                          <div class="capa-anuncio" style="background:url('${anuncio.capa}') #f2f2f2 no-repeat;background-size:cover;background-position:center center;">
+                                              <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&phone=${anuncio.celular}');" title="Clique para ir para o WhatsApp">
+                                                &nbsp;
+                                              </a>
+                                          </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <!-- ANUNCIO -->
+
+                        
+      
+                `;
+
+      }
+
+        });
+
+   
+
+    html = html + `
+    
+          </div>
+          <!-- ANUNCIOS -->
+    
+    `;
+
+  } 
+ 
+ return html;
+
+}

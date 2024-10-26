@@ -83,6 +83,8 @@ class Views{
 
             `);
 
+            var htmlAnuncios = anuncios("1");
+
             this._content.html(`
             
                <div class="row view-dashboard" view-name="view-dashboard">
@@ -102,6 +104,9 @@ class Views{
                      <h2 id="fraseDeAbertura">
                        Receba orçamentos de profissionais <b>qualificados</b> próximos a você!
                      </h2>
+
+
+                     ${htmlAnuncios}
 
                      <nav>
                        <ul id="listaDeCategorias">
@@ -126,6 +131,544 @@ class Views{
         
     }
 
+    meusAnuncios(){
+
+                  var idUsuario = localStorage.getItem("idUsuario");
+
+                  $("header .menu-bar-toggle").html(`
+
+                     <a class="saldo-atual" href="javascript:void(0)" onclick="app.resumoSaldoProfissional()" title="Seu saldo">
+                        <img src="assets/images/saldo.svg" alt="Seu saldo atual" /> <span id="saldoAtualUsuarioHeader">${localStorage.getItem("saldoPrestadorServico")}</span>
+                     </a>
+                     
+                     <a href="javascript:void(0)" onclick="app.abrirFecharMenuProfissional();" title="Abrir o menu">
+                        <img src="assets/images/menu-bar.svg" alt="Abrir o menu">
+                     </a>
+
+               `);
+
+               this._content.html(`
+               
+                  <div class="row view-dashboard view-profissional" view-name="view-dashboard" style="background:#fff !important;">
+                     <div class="col-12 wow fadeInUp" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                        
+                        <h2>
+                           Anuncie na SPZ Serviços!
+                        </h2>
+                        <p>
+                           Tenha mais visualizações exibindo anúncios em locais estratégicos dentro da plataforma.
+                        </p>
+
+                        <div class="loop-novos-servicos" id="opcoesMeusAnuncios">
+
+                              <p style="text-align:center;">
+                                 <img src="assets/images/loading.gif" alt="Carregando" style="width: 15px;height:auto;" />
+                              </p>
+                              <p style="text-align:center;color:#747474;font-size:13px;margin-top:-9px;">
+                                 Carregando
+                              </p>
+
+                        </div>
+
+                     </div>
+                  </div>
+               
+               `);
+
+               this.animarTransicao();
+
+               setTimeout(function(){ 
+
+                  jQuery("#opcoesMeusAnuncios").html(`
+                     
+                     <nav>
+                       <ul id="listaOpcoesMeusAnuncios">
+                         
+                         <li>
+                              <a href="javascript:void(0)" onclick="app.criarNovoAnuncio()" title="Criar novo anúncio">
+                                 Criar novo anúncio <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                              </a>
+                         </li>
+
+                         <li>
+                              <a href="javascript:void(0)" onclick="app.verTodosAnuncios()" title="Meus anúncios">
+                                 Meus anúncios <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                              </a>
+                         </li>
+                         
+                       </ul>
+                     </nav>
+
+                  `);
+
+               }, 3500);
+
+
+               
+
+
+
+    }
+
+    criarNovoAnuncio(){
+
+
+                  jQuery("#opcoesMeusAnuncios").html(`
+
+                     <h3>Criar novo anúncio:</h3>
+                     
+                     <form 
+                        id="formNewAnuncio" 
+                        method="post" 
+                        action="javascript:void(0)"
+                     >
+                        
+                              <div class="form-group">
+                                 <label>Título do anúncio</label>
+                                 <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    name="titulo_anuncio" 
+                                    id="titulo_anuncio" 
+                                    placeholder="Título do anúncio" 
+                                    required 
+                                    onkeyup="jQuery('#previewAnuncio h3').html(this.value)"
+                                    />
+                              </div>
+
+                              <div class="form-group">
+                                 <label>Breve descrição</label>
+                                 <textarea 
+                                    rows="3" 
+                                    class="form-control" 
+                                    id="descricao_anuncio" 
+                                    name="breve_descricao_anuncio" 
+                                    placeholder="Breve descrição do anúncio" 
+                                    required
+                                    oninput="jQuery('#previewAnuncio p').html(this.value); limitarTexto(this, 115);"
+                                    ></textarea>
+                                    <small 
+                                       id="contadorCaracteres" 
+                                       style="opacity:0.7;font-size:12px;display:block;text-align:right;"
+                                    >
+                                       0/115
+                                    </small>
+                              </div>
+
+                              <div class="form-group">
+                                 <label>Celular WhatsApp de contato</label>
+                                 <input type="tel" class="form-control" name="celular_destino_anuncio" id="celular_destino_anuncio" placeholder="DDD + número" required />
+                              </div>
+
+                              <div class="form-group selecao-pre-upload">
+                                 <label for="foto_destaque">
+                                    <img src="assets/images/8664927_image_photo_icon.svg" />
+                                    Selecione uma imagem de capa do anúncio
+                                 </label>
+                                 <input 
+                                    type="file" 
+                                    class="form-control" 
+                                    name="foto_destaque" 
+                                    id="foto_destaque" 
+                                    accept="image/*"
+                                    onchange="previewImagemAnuncio()" 
+                                    required 
+                                 />
+                              </div>
+
+                              <div id="previewContainerId"></div>
+
+                              <p style="font-size:12px;text-align:center;margin-top: 21px;margin-bottom: -22px;">
+                                 Preview do seu anúncio:
+                              </p>
+
+                              <!-- ANUNCIO -->
+                              <div class="area-anuncios">
+                                    <div class="anuncio" id="previewAnuncio">
+                                       <div class="row">
+                                          <div class="col-8">
+                                                <h3 style="font-size: 17px !important;margin-bottom: 3px !important;">Título do Anúncio</h3>
+                                                <p>Aqui um pequeno texto de descrição sobre o anúnico</p>
+                                                <a href="" title="WhatsApp">
+                                                   <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                                </a>
+                                          </div>
+                                          <div class="col-4" style="padding:0">
+                                             <div class="capa-anuncio" style="background:#ccc;">
+                                                <a href="" title="Clique para ir para o WhatsApp">
+                                                   &nbsp;
+                                                </a>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                              </div>
+                              <!-- ANUNCIO -->
+
+                              <div class="form-group">
+                                 <button 
+                                    onclick="processarEnvio('formNewAnuncio', 'foto_destaque', 'previewContainerId')" 
+                                    class="btn btn-primary"
+                                    id="botaoEnviarViaAjax"
+                                 >
+                                    Salvar anúncio
+                                 </button>
+                              </div>
+
+                     </form>
+                     
+
+                     <p>&nbsp;</p>
+                     <p>&nbsp;</p>
+                     <p>&nbsp;</p>
+                     <p>&nbsp;</p>
+                     <p>&nbsp;</p>
+                     <p>&nbsp;</p>
+               `);
+
+               $("#celular_destino_anuncio").inputmask("(99) 9 9999-9999");
+
+    }
+
+
+
+    verDetalheAnuncioAnunciante(){
+
+            var idUsuario = localStorage.getItem("idUsuario");
+
+            $("header .menu-bar-toggle").html(`
+
+                  <a class="saldo-atual" href="javascript:void(0)" onclick="app.resumoSaldoProfissional()" title="Seu saldo">
+                     <img src="assets/images/saldo.svg" alt="Seu saldo atual" /> <span id="saldoAtualUsuarioHeader">${localStorage.getItem("saldoPrestadorServico")}</span>
+                  </a>
+                  
+                  <a href="javascript:void(0)" onclick="app.abrirFecharMenuProfissional();" title="Abrir o menu">
+                     <img src="assets/images/menu-bar.svg" alt="Abrir o menu">
+                  </a>
+
+            `);
+
+            this._content.html(`
+            
+               <div class="row view-dashboard view-profissional" view-name="view-dashboard" style="background:#fff !important;">
+                  <div class="col-12 wow fadeInUp" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                     
+                     <h2 id="titulo">
+                        Carregando...
+                     </h2>
+                     <p id="subtitulo">
+                        Aguarde, estamos buscando as informações
+                     </p>
+
+                     <div class="loop-novos-servicos" id="opcoesMeusAnuncios">
+
+                           <p style="text-align:center;">
+                              <img src="assets/images/loading.gif" alt="Carregando" style="width: 15px;height:auto;" />
+                           </p>
+                           <p style="text-align:center;color:#747474;font-size:13px;margin-top:-9px;">
+                              Carregando
+                           </p>
+
+                     </div>
+
+                  </div>
+               </div>
+            
+            `);
+
+            this.animarTransicao();
+
+     }
+
+     editarAnuncio(){
+
+                  var idUsuario = localStorage.getItem("idUsuario");
+
+                  $("header .menu-bar-toggle").html(`
+
+                        <a class="saldo-atual" href="javascript:void(0)" onclick="app.resumoSaldoProfissional()" title="Seu saldo">
+                           <img src="assets/images/saldo.svg" alt="Seu saldo atual" /> <span id="saldoAtualUsuarioHeader">${localStorage.getItem("saldoPrestadorServico")}</span>
+                        </a>
+                        
+                        <a href="javascript:void(0)" onclick="app.abrirFecharMenuProfissional();" title="Abrir o menu">
+                           <img src="assets/images/menu-bar.svg" alt="Abrir o menu">
+                        </a>
+
+                  `);
+
+                  this._content.html(`
+                  
+                     <div class="row view-dashboard view-profissional" view-name="view-dashboard" style="background:#fff !important;">
+                        <div class="col-12 wow fadeInUp" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                           
+                           <h2 id="titulo">
+                              Carregando...
+                           </h2>
+                           <p id="subtitulo">
+                              Aguarde, estamos buscando as informações
+                           </p>
+
+                           <div class="loop-novos-servicos" id="opcoesMeusAnuncios">
+
+                                 <p style="text-align:center;">
+                                    <img src="assets/images/loading.gif" alt="Carregando" style="width: 15px;height:auto;" />
+                                 </p>
+                                 <p style="text-align:center;color:#747474;font-size:13px;margin-top:-9px;">
+                                    Carregando
+                                 </p>
+
+                           </div>
+
+                        </div>
+                     </div>
+                  
+                  `);
+
+                  this.animarTransicao();
+
+     }
+
+
+     viewPlanosPromocoes(idAnuncio){
+
+                  this._content.html(`
+                        
+                     <div class="row view-comprar-chaves" view-name="view-2">
+                        <div class="col-12 wow fadeInLeft" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                           
+                           <h2>
+                           <a href="javascript:void(0)" title="Voltar" onclick="app.viewPrincipalProfissional();">
+                              <img src="assets/images/voltar-views.svg" alt="Voltar" />
+                           </a> 
+                           Promova o seu anúncio para ele ser exibido para os usuários da nossa plataforma!</h2>
+                           <p>Selecione um plano de acordo com a sua necessidade:</p>
+
+                           <form id="formPacoteSelecao" method="post" action="javascript:void(0)" onsubmit="app.selecaoPlanosAnuncios(event)"> <!-- app.selecaoPacoteCompra(event) -->
+
+                                 <input 
+                                    type="hidden" 
+                                    name="id_anuncio" 
+                                    id="id_anuncio"
+                                    value="${idAnuncio}" 
+                                 />
+
+                                 <div id="appendPacotes">
+
+                                    <p style="text-align:center;">
+                                       <img src="assets/images/loading.gif" alt="Carregando" style="width: 15px;height:auto;" />
+                                    </p>
+                                    <p style="text-align:center;color:#747474;font-size:13px;margin-top:-9px;">
+                                       Carregando planos de divulgação
+                                    </p>
+
+                                 </div>
+                                 
+                                 <p>&nbsp;</p>
+                                 <div class="form-group">
+                                    <button typw="submit" id="btnComprarSelecionado" class="btn btn-primary">
+                                       COMPRAR SELECIONADO
+                                    </button> 
+                                 </div>
+
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+                                 <p>&nbsp;</p>
+
+                           </form>
+
+
+                        </div>
+                     </div>
+                  
+                  `);
+
+                  this.animarTransicao();
+
+     }
+
+     paginaDeCmopraPromocaoAnuncios(){
+
+               this._content.html(`
+                     
+                  <div class="row view-comprar-chaves view-finalizar-comprar" view-name="view-2">
+                     <div class="col-12 wow fadeInLeft" data-wow-delay="0.0s" data-wow-duration="0.3s">
+                        
+                        <h2>
+                        <a href="javascript:void(0)" title="Voltar" onclick="app.comprarChaves();">
+                           <img src="assets/images/voltar-views.svg" alt="Voltar" />
+                        </a> 
+                        Promova o seu anúncio</h2>
+                        <p>Você está comprando um plano de divulgação/impulsionamento para o seu anúncio na nossa plataforma:</p>
+
+                              <div id="pacoteEscolhido"></div>
+
+                              <h3 style="font-size:20px;">Como deseja realizar o pagamento?</h3>
+                              <p>
+                              Você pode realizar o pagamento através de cartão de crédito através de PIX.
+                              </p>
+
+                                    <!-- FORMAS DE PAGAMENTO -->
+                                    <div class="formas-de-pagamento">
+                                       
+                                       <div class="accordion" id="formasDePagamentoCollapse">
+                                             
+                                             <!-- FORMA DE PAGAMENTO -->
+                                             <div class="card">
+                                             <div class="card-header" id="headingOne">
+                                                <h2 class="mb-0">
+                                                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseCartaoCredito" aria-expanded="true" aria-controls="collapseCartaoCredito">
+                                                   <div class="custom-control custom-switch">
+                                                      <input type="radio" id="customRadio21" name="customRadio" class="custom-control-input" checked>
+                                                      <label class="custom-control-label" for="customRadio21">Cartão de crédito</label>
+                                                   </div>
+                                                   </button>
+                                                </h2>
+                                             </div>
+
+                                             <div id="collapseCartaoCredito" class="collapse show" aria-labelledby="headingOne" data-parent="#formasDePagamentoCollapse">
+                                                <div class="card-body formularios-dados-pagamento">
+                                                      
+                                                      <form method="post" action="javascript:void(0)" onsubmit="app.payCartaoDeCreditoAuncio(event)">
+
+                                                            <div class="row">
+                                                               <div class="col-12 form-group">
+                                                                  <label>Número do cartão</label>
+                                                                  <input type="tel" id="pagtoCCNumero" name="pagtoCCNumero" class="form-control" placeholder="Número do cartão">
+                                                               </div>
+                                                            </div>
+                                                            <div class="row">
+                                                               <div class="col-12 form-group">
+                                                               <label>Nome do títular</label>
+                                                                  <input type="text" id="pagtoCCNome" name="pagtoCCNome" class="form-control" placeholder="Nome impresso no cartão">
+                                                               </div>
+                                                            </div>
+                                                            <div class="row">
+                                                               <div class="col-12 form-group">
+                                                                  <label>CPF do títular</label>
+                                                                  <input type="tel" id="pagtoCCNumeroCPF" required name="pagtoCCNumeroCPF" class="form-control" placeholder="CPF do títular">
+                                                               </div>
+                                                            </div>
+                                                            
+                                                            <div class="row">
+                                                               
+                                                               <div class="col-6 form-group" style="padding-right: 5px;">
+                                                                  <label>Validade</label>
+                                                                  <input type="tel" id="pagtoCCValidade" name="pagtoCCValidade" class="form-control" placeholder="DD/AA">
+                                                               </div>
+                                                               
+                                                               <div class="col-6 form-group" style="padding-left: 5px;">
+                                                                  <label>CVV</label>
+                                                                  <input type="text" id="pagtoCCCvv" name="pagtoCCCvv" class="form-control" placeholder="CVV">
+                                                               </div>
+                                                               
+                                                            </div>
+
+                                                            <div class="row">
+                                                               <div class="col-12 form-group">
+                                                                  <label>Parcelas</label>
+                                                                  <select class="form-control" name="pagtoCCParcelas" id="pagtoCCParcelas">
+                                                                     
+                                                                  </select>
+                                                               </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                  
+                                                                  <div class="col-12">
+
+                                                                     <p id="areaStatusPagamentoCartao">
+                                                                           <button type="submit" id="btnPayCartao" class="btn btn-primary">
+                                                                              PAGAR COM CARTÃO DE CRÉDITO
+                                                                           </button>
+                                                                        </p>
+
+                                                                  </div>
+
+                                                            </div>
+
+                                                      </form>
+
+                                                </div>
+                                             </div>
+                                             </div>
+                                             <!-- FORMA DE PAGAMENTO -->
+
+                                          
+
+                                             <!-- FORMA DE PAGAMENTO -->
+                                             <div class="card">
+                                             <div class="card-header" id="headingThree">
+                                                <h2 class="mb-0">
+                                                   <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseBoleto" aria-expanded="false" aria-controls="collapseBoleto">
+                                                   <div class="custom-control custom-switch">
+                                                      <input type="radio" id="customRadio23" name="customRadio" class="custom-control-input">
+                                                      <label class="custom-control-label" for="customRadio23">PIX</label>
+                                                   </div>
+                                                   </button>
+                                                </h2>
+                                             </div>
+                                             <div id="collapseBoleto" class="collapse" aria-labelledby="headingThree" data-parent="#formasDePagamentoCollapse">
+                                                <div class="card-body formularios-dados-pagamento">
+                                                      
+                                                      <form id="formPayBoleto" method="post" action="javascript:void(0)" onsubmit="app.payBoletoAnuncio(event)">
+
+                                                         <div class="row">
+                                                               <div class="col-12 form-group">
+                                                                  <label>CPF</label>
+                                                                  <input type="tel" id="pagtoBBNumeroCPF" name="pagtoBBNumeroCPF" class="form-control" placeholder="CPF do pagador">
+                                                               </div>
+                                                         </div>
+                                                         <div class="row">
+                                                               <div class="col-12">
+                                                                  <label>Nome</label>
+                                                                  <input type="text" id="pagtoBBNome" name="pagtoBBNome" class="form-control" placeholder="Nome completo do pagador">
+                                                               </div>
+                                                         </div>
+
+                                                         <div class="row">
+                                                                  
+                                                                  <div class="col-12">
+
+                                                                     <p id="areaStatusPagamentoBoleto">
+                                                                           <button type="submit" id="btnPayBoleto" class="btn btn-primary">
+                                                                              PAGAR COM PIX
+                                                                           </button>
+                                                                        </p>
+
+                                                                  </div>
+
+                                                            </div>
+
+                                                      </form>
+
+                                                </div>
+                                             </div>
+                                             </div>
+                                          </div>
+                                          <!-- FORMA DE PAGAMENTO -->
+
+
+                                    </div>
+                                    <!-- FORMAS DE PAGAMENTO -->
+
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+                                    <p>&nbsp;</p>
+
+                     </div>
+                  </div>
+               
+               `);
+
+               this.animarTransicao();
+
+               app.helpers.carregarMascaras();
+
+     }
+
 
     novoAtendimento(idCategoria,nomeCategoria){
 
@@ -134,6 +677,8 @@ class Views{
 
        console.log("NOME CATEGORIA: "+nomeCategoria);
        console.log("ID CATEGORIA: "+idCategoria);
+
+       var htmlAnuncios = anuncios("3");
 
        this._content.html(`
             
@@ -220,6 +765,8 @@ class Views{
                             </div>
 
                      </form>
+
+                     ${htmlAnuncios}
 
                      <p>&nbsp;</p>
                      <p>&nbsp;</p>
@@ -1780,7 +2327,7 @@ class Views{
                                          <i class="fa fa-twitter"></i>
                                       </a>
 
-                                      <a href="javascript:void(0)" onclick="abrirUrl('https://wa.me/?text=Conheça o aplicativo SPZ SERVIÇOS https://servicekeys.com.br')" title="Compartilhar por WhatsApp">
+                                      <a href="javascript:void(0)" onclick="abrirUrl('https://api.whatsapp.com/send?l=pt_BR&text=Conheça o aplicativo RESOLVA JÁ https://linkdosite.com.br')" title="Compartilhar por WhatsApp">
                                          <i class="fa fa-whatsapp"></i>
                                       </a>
 

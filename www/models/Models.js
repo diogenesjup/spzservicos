@@ -550,6 +550,392 @@ categoriasAtendimento(){
 }
 
 
+
+/**
+*  ------------------------------------------------------------------------------------------------
+*
+*
+*   BAIXAR TODOS OS ANUNCIOS
+*
+*
+*  ------------------------------------------------------------------------------------------------
+*/
+verTodosAnuncios(){
+
+        // CONFIGURAÇÕES AJAX VANILLA
+        let xhr = new XMLHttpRequest();
+
+        var idUsuario = localStorage.getItem("idUsuario");
+        
+        xhr.open('POST', app.urlApi+'anuncios-listar',true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        var params = 'idUsuario='+idUsuario+
+                    "&token="+app.token;
+        
+        // INICIO AJAX VANILLA
+        xhr.onreadystatechange = () => {
+
+          if(xhr.readyState == 4) {
+
+            if(xhr.status == 200) {
+
+              console.log("BUSCA DOS ANUNCIOS CADASTRADOS");
+              console.log(JSON.parse(xhr.responseText));
+              
+              var dados = JSON.parse(xhr.responseText);
+
+              // SALVAR OS ANUNCIOS NA MEMORIA
+              localStorage.setItem("anuncios",JSON.stringify(dados));
+
+              jQuery("#opcoesMeusAnuncios").html(`
+                     
+                <nav>
+                  <ul id="listaOpcoesMeusAnuncios">
+                    
+                  <!--
+                    <li>
+                         <a href="javascript:void(0)" onclick="" title="">
+                            Anúncio de teste 1  <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);"> <span class="status-anuncio">ATIVO</span>
+                         </a>
+                    </li>
+
+                    <li>
+                         <a href="javascript:void(0)" onclick="app.verTodosAnuncios()" title="">
+                            Teste segundo  <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);"> <span class="status-anuncio">ATIVO</span>
+                         </a>
+                    </li>
+                  -->
+                    
+                  </ul>
+                </nav>
+
+             `);
+
+              $("#listaOpcoesMeusAnuncios").html(`
+
+                  ${dados.anuncios.map((n) => {
+
+                      if(n.id_dono_anuncio == localStorage.getItem("idUsuario")){
+
+                              var htmlAnuncio = `<span class="status-anuncio">INATIVO</span>`;
+
+                              if(n.status_anuncio=="Ativado"){
+                                htmlAnuncio = `<span class="status-anuncio ativo">ATIVO</span>`;
+                              }
+
+                              return `
+                                  
+                               <li>
+                                  <a 
+                                    href="javascript:void(0)" 
+                                    onclick="app.verDetalheAnuncioAnunciante(${n.id_anuncio});" 
+                                    title="n.titulo"
+                                  >
+                                      ${n.titulo}  <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);"> 
+                                      ${htmlAnuncio}
+                                  </a>
+                               </li>
+
+                              `
+                      }
+
+                      }).join('')}
+
+              `);
+
+            }else{
+              
+                console.log("SEM SUCESSO verTodosAnuncios()");
+                console.log(JSON.parse(xhr.responseText));
+                aviso("Oops! Algo deu errado.","Nossos servidores estão passando por dificuldades, tente novamente em alguns minutos.");
+
+            }
+
+          }
+      }; // FINAL AJAX VANILLA
+
+      /* EXECUTA */
+      xhr.send(params);
+
+
+}
+
+
+  verDetalheAnuncioAnunciante(idAnuncio){
+
+        var anuncios = JSON.parse(localStorage.getItem("anuncios"));
+
+        // LOCALIZAR O ANUNCIO CORRETO
+        var anuncio = anuncios.anuncios.find(function(anuncio) {
+            return anuncio.id_anuncio == idAnuncio;
+        });
+
+        jQuery("#titulo").html(`<small>Ver anúncio</small><br>${anuncio.titulo}`);
+        jQuery("#subtitulo").html(`Você pode editar, excluir, ou <strong>PROMOVER</strong> o seu anúncio:`);
+
+        var htmlAnuncio = `<span class="status-anuncio" style="position: absolute;display: block;right: -8px;top: -8px;z-index: 9;">INATIVO</span>`;
+
+        if(anuncio.status_anuncio=="Ativado"){
+              htmlAnuncio = `<span class="status-anuncio ativo" style="position: absolute;display: block;right: -8px;top: -8px;z-index: 9;">ATIVO</span>`;
+        }
+
+        // EXIBIR O ANUNCIO
+        jQuery("#opcoesMeusAnuncios").html(`
+          
+                              <!-- ANUNCIO -->
+                              <div class="area-anuncios">
+                                    <div class="anuncio" id="previewAnuncio">
+                                       <div class="row">
+                                          <div class="col-8">
+                                                <h3 style="font-size: 17px !important;margin-bottom: 3px !important;">${anuncio.titulo}</h3>
+                                                <p>
+                                                  ${anuncio.descricao}
+                                                </p>
+                                                <a href="" title="WhatsApp">
+                                                   <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                                </a>
+                                          </div>
+                                          <div class="col-4" style="padding:0">
+                                             <div class="capa-anuncio" style="background:url('${anuncio.capa}') #f2f2f2 no-repeat;background-size:cover;background-position:center center;">
+                                                <a href="" title="Clique para ir para o WhatsApp">
+                                                   &nbsp;
+                                                </a>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       ${htmlAnuncio}
+                                    </div>
+                              </div>
+                              <!-- ANUNCIO -->
+
+                               <nav>
+                                <ul id="listaOpcoesMeusAnuncios">
+                                  
+                                        <li>
+                                              <a href="javascript:void(0)" onclick="app.editarAnuncio(${idAnuncio})" title="Editar anúncio">
+                                                Editar anúncio <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                                              </a>
+                                        </li>
+                                        <li>
+                                              <a href="javascript:void(0)" onclick="app.promoverAnuncio(${idAnuncio})" title="Promover (ativar)">
+                                                Promover  (ativar) <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                                              </a>
+                                        </li>
+                                        <li>
+                                              <a href="javascript:void(0)" onclick="app.verTodosAnuncios();" title="Voltar para todos os anúncios">
+                                                Voltar para todos os anúncios <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                                              </a>
+                                        </li>
+                                        <li style="padding-top:55px;">
+                                              <a href="javascript:void(0)" onclick="app.apagarAnuncio(${idAnuncio})" title="Apagar" style="color:#ff0000;">
+                                                Apagar <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                                              </a>
+                                        </li>
+
+                                  
+                                </ul>
+                              </nav>
+                              <p>&nbsp;</p>
+                              <p>&nbsp;</p>
+                              <p>&nbsp;</p>
+          
+        `);
+
+
+
+  }
+
+
+  
+  editarAnuncio(idAnuncio){
+
+    var anuncios = JSON.parse(localStorage.getItem("anuncios"));
+
+    // LOCALIZAR O ANUNCIO CORRETO
+    var anuncio = anuncios.anuncios.find(function(anuncio) {
+        return anuncio.id_anuncio == idAnuncio;
+    });
+
+    jQuery("#titulo").html(`<small>Editar anúncio</small><br>${anuncio.titulo}`);
+    jQuery("#subtitulo").html(`Atualize as informações do seu anúncio:`);
+
+    var htmlAnuncio = `<span class="status-anuncio" style="position: absolute;display: block;right: -8px;top: -8px;z-index: 9;">INATIVO</span>`;
+
+    if(anuncio.status_anuncio=="Ativado"){
+          htmlAnuncio = `<span class="status-anuncio ativo" style="position: absolute;display: block;right: -8px;top: -8px;z-index: 9;">ATIVO</span>`;
+    }
+
+    // EXIBIR O ANUNCIO
+    jQuery("#opcoesMeusAnuncios").html(`
+      
+                          <form 
+                              id="formNewAnuncio" 
+                              method="post" 
+                              action="javascript:void(0)"
+                          >
+                        
+                              <div class="form-group">
+                                 <label>Título do anúncio</label>
+                                 <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    name="titulo_anuncio" 
+                                    id="titulo_anuncio" 
+                                    placeholder="Título do anúncio" 
+                                    required 
+                                    value="${anuncio.titulo}"
+                                    onkeyup="jQuery('#previewAnuncio h3').html(this.value)"
+                                    />
+                              </div>
+
+                              <div class="form-group">
+                                 <label>Breve descrição</label>
+                                 <textarea 
+                                    rows="3" 
+                                    class="form-control" 
+                                    id="descricao_anuncio" 
+                                    name="breve_descricao_anuncio" 
+                                    placeholder="Breve descrição do anúncio" 
+                                    required
+                                    oninput="jQuery('#previewAnuncio p').html(this.value); limitarTexto(this, 115);"
+                                    >${anuncio.descricao}</textarea>
+                                    <small 
+                                       id="contadorCaracteres" 
+                                       style="opacity:0.7;font-size:12px;display:block;text-align:right;"
+                                    >
+                                       0/115
+                                    </small>
+                              </div>
+
+                              <div class="form-group">
+                                 <label>Celular WhatsApp de contato</label>
+                                 <input type="tel" class="form-control" value="${anuncio.celular}" name="celular_destino_anuncio" id="celular_destino_anuncio" placeholder="DDD + número" required />
+                              </div>
+
+                              <div class="form-group selecao-pre-upload">
+                                 <label for="foto_destaque">
+                                    <img src="assets/images/8664927_image_photo_icon.svg" />
+                                    Selecione uma imagem de capa do anúncio
+                                 </label>
+                                 <input 
+                                    type="file" 
+                                    class="form-control" 
+                                    name="foto_destaque" 
+                                    id="foto_destaque" 
+                                    accept="image/*"
+                                    onchange="previewImagemAnuncio()" 
+                                     
+                                 />
+                              </div>
+
+                              <div id="previewContainerId"></div>
+
+                              <p style="font-size:12px;text-align:center;margin-top: 21px;margin-bottom: -22px;">
+                                 Preview do seu anúncio:
+                              </p>
+
+                              <!-- ANUNCIO -->
+                              <div class="area-anuncios">
+                                    <div class="anuncio" id="previewAnuncio">
+                                       <div class="row">
+                                          <div class="col-8">
+                                                <h3 style="font-size: 17px !important;margin-bottom: 3px !important;">${anuncio.titulo}</h3>
+                                                <p>${anuncio.descricao}</p>
+                                                <a href="" title="WhatsApp">
+                                                   <img src="assets/images/4102606_applications_media_social_whatsapp_icon.svg" alt="WhatsApp"> WhatsApp
+                                                </a>
+                                          </div>
+                                          <div class="col-4" style="padding:0">
+                                             <div class="capa-anuncio" style="background:url('${anuncio.capa}') #ccc no-repeat;background-size:cover;background-position:center center;">
+                                                <a href="" title="Clique para ir para o WhatsApp">
+                                                   &nbsp;
+                                                </a>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                              </div>
+                              <!-- ANUNCIO -->
+
+                              <div class="form-group">
+                                 <button 
+                                    onclick="processarEnvioEdicao('formNewAnuncio', 'foto_destaque', 'previewContainerId',${idAnuncio})" 
+                                    class="btn btn-primary"
+                                    id="botaoEnviarViaAjax"
+                                 >
+                                    Atualizar anúncio
+                                 </button>
+                              </div>
+
+                     </form>
+                     
+                           <p>&nbsp;</p>
+                     
+                           <nav>
+                              <ul id="listaOpcoesMeusAnuncios">
+                                
+                                      <li>
+                                            <a href="javascript:void(0)" onclick="app.meusAnuncios();" title="Cancelar">
+                                              Cancelar <img src="assets/images/right.svg" alt="Ver mais" style="opacity:0.8;filter:grayscale(0.50);">
+                                            </a>
+                                      </li>
+                        
+                              </ul>
+                          </nav>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+                          <p>&nbsp;</p>
+      
+    `);
+
+    $("#celular_destino_anuncio").inputmask("(99) 9 9999-9999");
+
+}
+
+  apagarAnuncio(idAnuncio){
+
+            // CONFIGURAÇÕES AJAX VANILLA
+            let xhr = new XMLHttpRequest();
+
+            var idUsuario = localStorage.getItem("idUsuario");
+            
+            xhr.open('POST', app.urlApi+'anuncios-apagar',true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            var params = 'idAnuncio='+idAnuncio+
+                        "&token="+app.token;
+            
+            // INICIO AJAX VANILLA
+            xhr.onreadystatechange = () => {
+
+              if(xhr.readyState == 4) {
+
+                if(xhr.status == 200) {
+
+                    console.log("REMOÇÃO DO ANÚNCIO");
+                    console.log(JSON.parse(xhr.responseText));
+
+                    app.verTodosAnuncios();
+
+                    aviso("Deu certo!","O seu anúncio foi apagado com sucesso.");
+
+                }else{
+                  
+                    console.log("SEM SUCESSO apagarAnuncio()");
+                    console.log(JSON.parse(xhr.responseText));
+                    aviso("Oops! Algo deu errado.","Nossos servidores estão passando por dificuldades, tente novamente em alguns minutos.");
+
+                }
+
+              }
+          }; // FINAL AJAX VANILLA
+
+          /* EXECUTA */
+          xhr.send(params);
+
+  }
+
 /**
 *  ------------------------------------------------------------------------------------------------
 *
@@ -964,6 +1350,10 @@ pacoteChaves(){
 
               console.log("COMECANDO A IMPRIMIR OS PACOTES NA TELA:");
 
+              // SALVAR NA MEMÓRIA
+              localStorage.setItem("pacotes",JSON.stringify(dados.pacotes));
+              localStorage.setItem("promover_anuncios",JSON.stringify(dados.promover_anuncios));
+
               $("#appendPacotes").html(`
 
                   ${dados.pacotes.map((n) => {
@@ -1017,7 +1407,7 @@ pacoteChaves(){
 selecaoPacoteDeChaves(pacoteEscolhido){
 
 
-  // CONFIGURAÇÕES AJAX VANILLA
+        // CONFIGURAÇÕES AJAX VANILLA
         let xhr = new XMLHttpRequest();
 
         var idUsuario = localStorage.getItem("idUsuario");
@@ -1146,6 +1536,136 @@ selecaoPacoteDeChaves(pacoteEscolhido){
 }
 
 
+planosPromocoes(){
+
+          // CONFIGURAÇÕES AJAX VANILLA
+          let xhr = new XMLHttpRequest();
+
+          var idUsuario = localStorage.getItem("idUsuario");
+
+          let temp = 0;
+          let resultado = 0;
+          var checked = "checked";
+
+          xhr.open('POST', app.urlApi+'pacotes-chaves',true);
+          xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+          var params = 'idUsuario='+idUsuario+ 
+                      "&token="+app.token;
+          
+          // INICIO AJAX VANILLA
+          xhr.onreadystatechange = () => {
+
+            if(xhr.readyState == 4) {
+
+              if(xhr.status == 200) {
+
+                console.log("PACOTES DISPONÍVEIS PARA COMPRA");
+
+                console.log(JSON.parse(xhr.responseText));
+                
+                var dados = JSON.parse(xhr.responseText);
+
+                console.log("COMECANDO A IMPRIMIR OS PACOTES NA TELA:");
+
+                // SALVAR NA MEMÓRIA
+                localStorage.setItem("pacotes",JSON.stringify(dados.pacotes));
+                localStorage.setItem("promover_anuncios",JSON.stringify(dados.promover_anuncios));
+                
+                $("#appendPacotes").html(`
+
+                    <!-- PACOTE PROMOÇÃO ANUNCIO -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="pacote" id="pacote1" value="1" checked>
+                        <label class="form-check-label" for="pacote1">
+                           Destaque principal
+                           <small>Seu anúncio será exibido na página principal do aplicativo, durante ${dados.promover_anuncios.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
+                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">À vista por R$${dados.promover_anuncios.valor_destaque_principal_global.replace(".",",")}</small>
+                        </label>
+                    </div>
+                    <!-- PACOTE PROMOÇÃO ANUNCIO --> 
+
+                    <!-- PACOTE PROMOÇÃO ANUNCIO -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="pacote" id="pacote2" value="2">
+                        <label class="form-check-label" for="pacote2">
+                           Destaque na categoria
+                           <small>Seu anúncio será exibido na página principal da mesma categoria que você pertence, durante ${dados.promover_anuncios.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
+                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">À vista por R$${dados.promover_anuncios.valor_destaque_principal_categoria.replace(".",",")}</small>
+                        </label>
+                    </div>
+                    <!-- PACOTE PROMOÇÃO ANUNCIO --> 
+
+                    <!-- PACOTE PROMOÇÃO ANUNCIO -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="pacote" id="pacote3" value="3">
+                        <label class="form-check-label" for="pacote3">
+                           Banner comum interno
+                           <small>Seu anúncio será exibido na página de criação de anúncios, com menos destaques, durante ${dados.promover_anuncios.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
+                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">À vista por R$${dados.promover_anuncios.valor_destaque_comum_interno.replace(".",",")}</small>
+                        </label>
+                    </div>
+                    <!-- PACOTE PROMOÇÃO ANUNCIO --> 
+
+                `);
+                
+              }else{
+                
+                console.log("SEM SUCESSO planosPromocoes()");
+                console.log(JSON.parse(xhr.responseText));
+                aviso("Oops! Algo deu errado.","Nossos servidores estão passando por dificuldades, tente novamente em alguns minutos.");
+
+              }
+
+            }
+        }; // FINAL AJAX VANILLA
+
+        /* EXECUTA */
+        xhr.send(params);
+
+  }
+
+  selecaoPlanosAnuncios(id_anuncio, pacoteEscolhido){
+
+        localStorage.setItem("idAnuncioPromocao",id_anuncio);
+        localStorage.setItem("pacoteEscolhido",pacoteEscolhido);
+
+        var planos     = JSON.parse(localStorage.getItem("promover_anuncios"));
+        var nomePlano  = "";
+        var precoPlano = "";
+
+        app.views.paginaDeCmopraPromocaoAnuncios();
+
+        if(pacoteEscolhido==1){
+            nomePlano = "Destaque global";
+            precoPlano = planos.valor_destaque_comum_interno;
+        }
+        if(pacoteEscolhido==2){
+            nomePlano = "Destaque na categoria";
+            precoPlano = planos.valor_destaque_principal_categoria;
+        }
+        if(pacoteEscolhido==3){
+            nomePlano = "Destaque comum simples";
+            precoPlano = planos.valor_destaque_principal_global;
+        }
+
+        jQuery("#pacoteEscolhido").html(`
+
+          <h2>
+            ${nomePlano}
+            <small style="display:block;">Duração de dias do anúncio: ${planos.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
+            R$${precoPlano}
+          </h2>  
+          
+        `);
+        
+        jQuery("#pagtoCCParcelas").html(`
+          
+            <option value="1">1X de R$${precoPlano}</option>
+          
+        `);
+
+  }
 
 
 payBoleto(){
@@ -1227,6 +1747,90 @@ payBoleto(){
       xhr.send(params);
 
       $("#btnPayBoleto").html("PAGAR COM BOLETO");
+
+
+
+}
+
+
+
+
+payBoletoAnuncio(){
+      
+        // CAPTURAR OS DADOS DO FORMULÁRIO
+        var dados = $('#formPayBoleto').formSerialize();
+
+        var idUsuario = localStorage.getItem("idUsuario");
+        var idAnuncioPromocao = localStorage.getItem("idAnuncioPromocao");
+        var pacoteEscolhido = localStorage.getItem("pacoteEscolhido");
+
+        //var dadosUsuario = JSON.parse(localStorage.getItem("dadosUsuario"));
+
+        var nome = localStorage.getItem("nomeCompletoUsuario");
+        var celular = localStorage.getItem("celularUsuario");
+        var email = localStorage.getItem("emailUsuario");
+        var valorPagamento = localStorage.getItem("valorPagamento");
+        var valorPagamentoOriginal = localStorage.getItem("valorPagamentoOriginal");
+        var qtd_chaves = localStorage.getItem("qtd_chaves");
+
+      
+        // CONFIGURAÇÕES AJAX VANILLA
+        let xhr = new XMLHttpRequest();
+        
+        xhr.open('POST', app.urlApi+'payboletoAnuncio',true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        var params = 'idUsuario='+idUsuario+
+                    "&token="+app.token+
+                    "&tokenSms="+app.tokenSms+
+                    "&"+dados+
+                    "&nome="+nome+
+                    "&celular="+celular+
+                    "&email="+email+
+                    "&valorPagamento="+valorPagamento+
+                    "&pacoteEscolhido="+pacoteEscolhido+
+                    "&idAnuncioPromocao="+idAnuncioPromocao;
+        
+        // INICIO AJAX VANILLA
+        xhr.onreadystatechange = () => {
+
+          if(xhr.readyState == 4) {
+
+            if(xhr.status == 200) {
+
+              console.log("RETORNO PAGAMENTO PIX: ");
+              //console.log(xhr.responseText);
+              console.log(JSON.parse(xhr.responseText));
+
+              var dados = JSON.parse(xhr.responseText);
+
+              if(dados.sucesso==200){
+                  app.views.dadosBoleto(dados.dados_boleto);
+
+                  // SALVAR AS INFORMAÇÕES DA COMPRA DO USUÁRIO
+                  app.models.salvarDadosCompraUsuarioAnuncio(dados.dados_boleto.customer,dados.dados_boleto.id);
+                  
+              }else{
+                  aviso("Oops! Algo deu errado","Tente novamente dentro de alguns minutos. Essa é a mensagem de erro: "+dados.description);
+                  app.viewPrincipalProfissional();
+              }
+              
+            }else{
+              
+              console.log("SEM SUCESSO payBoletoAnuncio()");
+              console.log(xhr.responseText);
+
+              aviso("Oops! Algo deu errado","Tente novamente em alguns minutos.");
+
+            }
+
+          }
+      }; // FINAL AJAX VANILLA
+
+      /* EXECUTA */
+      xhr.send(params);
+
+      $("#btnPayBoleto").html("PAGAR COM PIX");
 
 
 
@@ -1360,6 +1964,139 @@ payCartaoDeCredito(){
       
 }
 
+
+
+
+
+payCartaoDeCreditoAnuncio(){
+
+  // CAPTURAR OS DADOS DO FORMULÁRIO
+  var dados = $('#formPayBoleto').formSerialize();
+
+  var idUsuario = localStorage.getItem("idUsuario");
+  var pacoteEscolhido = localStorage.getItem("pacoteEscolhido");
+  var idAnuncioPromocao = localStorage.getItem("idAnuncioPromocao");
+
+
+  //var dadosUsuario = JSON.parse(localStorage.getItem("dadosUsuario"));
+
+  var nome = localStorage.getItem("nomeCompletoUsuario");
+  var celular = localStorage.getItem("celularUsuario");
+  var email = localStorage.getItem("emailUsuario");
+
+  var pagtoCCNumero    = $("#pagtoCCNumero").val();
+  pagtoCCNumero = pagtoCCNumero.replace("-","");
+
+  var pagtoCCNome      = $("#pagtoCCNome").val();
+  var pagtoCCNumeroCPF = $("#pagtoCCNumeroCPF").val();
+  
+  var pagtoCCValidade  = $("#pagtoCCValidade").val();
+  pagtoCCValidade = pagtoCCValidade.split("/");
+
+  var mesValidade = pagtoCCValidade[0];
+  var anoValidade = pagtoCCValidade[1];
+
+  var pagtoCCCvv       = $("#pagtoCCCvv").val();
+
+  var valorPagamento = localStorage.getItem("valorPagamento");
+  var valorPagamentoOriginal = localStorage.getItem("valorPagamentoOriginal");
+  var qtd_chaves = localStorage.getItem("qtd_chaves");
+
+  var pagtoCCParcelas = $("#pagtoCCParcelas").val();
+
+
+  console.log(nome);
+  console.log(celular);
+  console.log(email);
+  console.log(pagtoCCNumero);
+  console.log(mesValidade);
+  console.log(anoValidade);
+  console.log(pagtoCCParcelas);
+  console.log(app.tokenSms);
+
+  
+ 
+  // CONFIGURAÇÕES AJAX VANILLA
+  
+  let xhr = new XMLHttpRequest();
+   
+  xhr.open('POST', app.urlApi+'cartaodecredito',true);
+  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+  var params = 'idUsuario='+idUsuario+
+               "&token="+app.token+
+               "&tokenSms="+app.tokenSms+
+               "&"+dados+
+               "&nome="+nome+
+               "&celular="+celular+
+               "&email="+email+
+               "&pagtoCCNumero="+pagtoCCNumero+
+               "&pagtoCCNome="+pagtoCCNome+
+               "&pagtoCCNumeroCPF="+pagtoCCNumeroCPF+
+               "&pagtoCCValidade="+pagtoCCValidade+
+               "&mesValidade="+mesValidade+
+               "&anoValidade="+anoValidade+
+               "&pagtoCCCvv="+pagtoCCCvv+
+               "&valorPagamento="+valorPagamento+
+               "&pacoteEscolhido="+pacoteEscolhido+
+               "&idAnuncioPromocao="+idAnuncioPromocao+
+               "&pagtoCCParcelas="+pagtoCCParcelas;
+
+
+  // INICIO AJAX VANILLA
+  xhr.onreadystatechange = () => {
+
+    if(xhr.readyState == 4) {
+
+      if(xhr.status == 200) {
+
+        console.log("RETORNO PAGAMENTO CARTAO");
+        //console.log(xhr.responseText);
+        console.log(JSON.parse(xhr.responseText));
+
+        var dados = JSON.parse(xhr.responseText);
+        
+        // DIRECIONAR PARA QUANDO O PAGAMENTO FOR CONFIRMADO 
+        if(dados.sucesso==200 && dados.dados_cobranca_cc.status=="CONFIRMED"){
+
+            setTimeout(function(){ 
+     
+               app.views.dadosCartao(dados.dados_cobranca_cc.invoiceUrl);
+               //app.models.atualizarSaldoCompra();
+
+               // SALVAR HISTÓRICO DE PAGAMENTO DO USUÁRIO
+               app.models.salvarDadosCompraUsuarioAnuncio(dados.dados_cobranca_cc.customer,dados.dados_cobranca_cc.id);
+
+            }, 3000);
+
+        // DIRECIONAR PARA QUANDO O PAGAMENTO TIVER DADO PROBLEMA (NÃO AUTORIZADO OU PENDENTE)
+        }else{
+
+          setTimeout(function(){ 
+     
+               app.views.dadosCartaoPendente(dados.erro);
+
+            }, 3000);
+
+        }
+
+
+      }else{
+        
+        console.log("SEM SUCESSO payCartaoDeCreditoAnuncio()");
+        console.log(JSON.parse(xhr.responseText));
+
+        aviso("Oops! Algo deu errado","Tente novamente em alguns minutos.");
+
+      }
+
+    }
+}; // FINAL AJAX VANILLA
+
+xhr.send(params);
+
+}
+
 // ATUALIZAR O SALDO DO USUÁRIO NA TELA DO APP
 atualizarSaldoCompra(){
    
@@ -1425,6 +2162,64 @@ salvarDadosCompraUsuario(customer,id){
 
 
 }
+
+
+
+
+salvarDadosCompraUsuarioAnuncio(customer,id){
+
+  console.log("SALVAR OS DADOS DO ASAAS NO HISTÓRICO DE PEDIDOS DO CLIENTE");
+
+  var idUsuario = localStorage.getItem("idUsuario");
+
+  var pacoteEscolhido   = localStorage.getItem("pacoteEscolhido");
+  var idAnuncioPromocao = localStorage.getItem("idAnuncioPromocao");
+
+     // CONFIGURAÇÕES AJAX VANILLA
+     let xhr = new XMLHttpRequest();
+      
+     xhr.open('POST', app.urlApi+'salvar-dados-compra-usuario-anuncio',true);
+     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+     var params = 'idUsuario='+idUsuario+
+                  "&token="+app.token+
+                  "&pacoteEscolhido="+pacoteEscolhido+
+                  "&idAnuncioPromocao="+idAnuncioPromocao+
+                  "&customer="+customer+
+                  "&id="+id;
+
+     // INICIO AJAX VANILLA
+     xhr.onreadystatechange = () => {
+
+       if(xhr.readyState == 4) {
+
+         if(xhr.status == 200) {
+
+           console.log("RETORNO SALVAR INFOS PEDIDO E CLIENTE ASAAS");
+           //console.log(xhr.responseText);
+           console.log(JSON.parse(xhr.responseText));
+
+         }else{
+           
+           console.log("SEM SUCESSO salvarDadosCompraUsuarioAnuncio()");
+           console.log(JSON.parse(xhr.responseText));
+
+           aviso("Oops! Algo deu errado","Tente novamente em alguns minutos.");
+
+         }
+
+       }
+   }; // FINAL AJAX VANILLA
+
+   xhr.send(params);
+
+}
+
+
+
+
+
+
 
 
 duvidasESuporte(){

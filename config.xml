@@ -39,7 +39,8 @@
     <preference name="android-minSdkVersion" value="29" />
     <preference name="android-targetSdkVersion" value="33" />
     <preference name="AndroidXEnabled" value="true" />
-
+    <preference name="StatusBarBackgroundColor" value="#000" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
     <!--
     <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application/activity[@android:name='MainActivity']">
         <activity android:exported="true" />

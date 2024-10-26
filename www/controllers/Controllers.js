@@ -25,6 +25,7 @@ class App {
 
             this.urlDom = "https://servidorseguro.cloud/spz-servicos/app/www/";
             this.urlApi = "https://servidorseguro.cloud/spz-servicos/apiservicekeys/";
+            this.urlApiAjax = "https://servidorseguro.cloud/spz-servicos/wp-admin/";
             this.urlCdn = "https://servidorseguro.cloud/spz-servicos/cdn/";
 
         }
@@ -56,9 +57,15 @@ class App {
         // VERIFICAR SE O USUÁRIO ESTÄ LOGADO
         this.sessao.verificarLogado();
 
+        // CARREGAR ANUNCIOS NA MEMORIA
+        app.models.verTodosAnuncios();
+
     }
 
     inicio(){
+
+        // CARREGAR ANUNCIOS NA MEMORIA
+        app.models.verTodosAnuncios();
 
         this.views.viewPrincipal();
         this.views.ativarMenuUm();
@@ -292,6 +299,82 @@ class App {
 *  ------------------------------------------------------------------------------------------------
 *
 *
+*   ANUNCIOS
+*
+*
+*  ------------------------------------------------------------------------------------------------
+*/
+    meusAnuncios(){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+        this.views.meusAnuncios();
+
+    }
+
+    verTodosAnuncios(){
+
+        jQuery("#opcoesMeusAnuncios").html(`
+            
+            <p style="text-align:center;">
+                <img src="assets/images/loading.gif" alt="Carregando" style="width: 15px;height:auto;" />
+            </p>
+            <p style="text-align:center;color:#747474;font-size:13px;margin-top:-9px;">
+                Carregando
+            </p>
+            
+        `);
+        
+        // BUSCAR TODOS OS ANUNCIOS
+        app.models.verTodosAnuncios();
+
+    }
+
+    criarNovoAnuncio(){
+
+        this.views.criarNovoAnuncio();
+
+    }
+
+    verDetalheAnuncioAnunciante(idAnuncio){
+
+        this.views.verDetalheAnuncioAnunciante();
+        this.models.verDetalheAnuncioAnunciante(idAnuncio);
+
+    }
+
+    apagarAnuncio(idAnuncio){
+
+        confirmacao("Tem certeza que deseja apagar o seu anúncio?","Essa ação não poderá ser desfeita, e o seu anúncio será removido da plataforma.",`app.confirmarApagarAnuncio(${idAnuncio})`,"Sim, apagar");
+
+    }
+
+    confirmarApagarAnuncio(idAnuncio){
+
+        aviso("Processando...","Aguarde, estamos removendo o seu anúncio.");
+        
+        console.log("REMOVER ANUNCIO: "+idAnuncio);
+
+        this.models.apagarAnuncio(idAnuncio); 
+
+    }
+
+    editarAnuncio(idAnuncio){
+
+        this.views.editarAnuncio();
+        this.models.editarAnuncio(idAnuncio);
+
+    }
+
+    promoverAnuncio(idAnuncio){
+
+        this.views.viewPlanosPromocoes(idAnuncio);
+        this.models.planosPromocoes(idAnuncio);
+
+    }
+
+/**
+*  ------------------------------------------------------------------------------------------------
+*
+*
 *   SOLICITAÇÕES DO CLIENTE
 *
 *
@@ -484,16 +567,36 @@ filtrotabela(){
 
     }
 
+    selecaoPlanosAnuncios(){
+
+        // SELECIONAR A OPÇÃO ESCOLHIDA
+        var pacoteEscolhido = $('input[name=pacote]:checked', '#formPacoteSelecao').val();
+        var id_anuncio      = $('#id_anuncio').val();
+
+        console.log("PACOTE ESCOLHIDO PELO USUÁRIO: "+pacoteEscolhido);
+
+        $("#btnComprarSelecionado").html("Carregando....");
+
+        // SELECIONAR O VALOR DE ACORDO COM A ESCOLHA
+        this.models.selecaoPlanosAnuncios(id_anuncio, pacoteEscolhido);
+
+        // DIRECIONAR PARA A TELA DE COMPRA DO PACOTE
+        //this.views.paginaDeCmopra();
+
+        // CARREGAR O PRECO DO PACOTE ESCOLHIDO
+        //this.models.paginaDeCompra();
+        
+        // DIRECIONAR PARA O DETALHE DO ORÇAMENTO (PROVISORIO)
+        //this.views.viewDetalheAnuncio();
+
+    }
+
     payBoleto(evemt){
-         
          
          $("#btnPayBoleto").html("PROCESSANDO...");
          this.views.processandoPagamento();
 
-         this.models.payBoleto();
-
-
-  
+         this.models.payBoleto();  
 
     }
 
@@ -510,6 +613,29 @@ filtrotabela(){
         this.views.dadosBoleto(dados);
 
     }
+
+
+    payBoletoAnuncio(evemt){
+         
+        $("#btnPayBoleto").html("PROCESSANDO...");
+        this.views.processandoPagamento();
+        this.models.payBoletoAnuncio();  
+
+   }
+
+   payCartaoDeCreditoAuncio(){
+       
+       $("#btnPayCartao").html("PROCESSANDO...");
+       this.views.processandoPagamentoCartao();
+       this.models.payCartaoDeCreditoAnuncio();
+
+   }
+
+   dadosBoleto(dados){
+       
+       this.views.dadosBoleto(dados);
+
+   }
 
 
     /* CURSOS */

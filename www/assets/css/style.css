@@ -911,7 +911,7 @@ section#content .view-3{
     filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.09));
     border-radius: 20px;
     margin-top: 50px;
-    width: 86%;
+    width: 100%;
     margin-bottom: 50px;
 }
 
@@ -2141,6 +2141,144 @@ p.apoio-servico{
 
 
 
+/*---------------------------------
+  ANUNCIOS
+-----------------------------------*/
+.area-anuncios {
+  position:relative;
+  display: block;
+  margin-top: 37px;
+}
+
+#opcoesMeusAnuncios h3{
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.area-anuncios h1{
+  font-size: 12px;
+  color: #666;
+  text-decoration: underline;
+  margin-bottom: 17px;
+}
+.area-anuncios .anuncio {
+  position:relative;
+  display: block;
+  margin-bottom: 13px;
+  background: #f2f2f2;
+  border-radius: 8px;
+  padding: 10px;
+}
+.area-anuncios .anuncio div h3 {
+  font-weight: bold;
+    font-size: 17px;
+    margin-bottom: 3px;
+}
+.area-anuncios .anuncio div p {
+  color: #000;
+    font-size: 13px;
+    line-height: 19px;
+    margin-bottom: 5px;
+}
+.area-anuncios .anuncio div.col-8 a,
+.area-anuncios .anuncio div.col-8 a:hover {
+  position: relative;
+  display: block;
+  background: #19af40;
+  color: #fff;
+  font-weight: bold;
+  padding: 5px;
+  padding-bottom: 5px;
+  border-radius: 7px;
+  font-size: 13px;
+  width: fit-content;
+  min-width: 133px;
+  text-align: center;
+  text-decoration: none;
+}
+.area-anuncios .anuncio div.col-8 a img {
+  width: 21px;
+  vertical-align: middle;
+}
+.area-anuncios .anuncio div .capa-anuncio {
+  position:relative;
+  display: block;
+  border-radius: 12px;
+  width: 100%;
+  height: 93px;
+}
+.area-anuncios .anuncio div .capa-anuncio a,
+.area-anuncios .anuncio div .capa-anuncio a:hover {
+  text-decoration: none;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
 
 
+span.status-anuncio{
+  position: relative;
+    display: inline-block;
+    font-weight: bold;
+    background: #ff0000;
+    color: #fff;
+    font-size: 12px;
+    padding: 5px;
+    padding-top: 3px;
+    border-radius: 5px;
+    margin-right: 10px;
+    float: right;
+}
 
+.status-anuncio.ativo{
+  background: #1ba532;
+}
+
+.selecao-pre-upload{
+  position: relative;
+  display: block;
+  text-align: center;
+}
+
+.selecao-pre-upload label{
+  cursor: pointer;
+    position: relative;
+    display: block;
+    border: 2px dotted #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    min-height: 120px;
+    background: #f9f9f9;
+}
+
+.selecao-pre-upload label img{
+  display: block;
+  opacity: 0.25;
+  width: 32px;
+  height: auto;
+  margin-bottom: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 12px;
+  margin-top: 4px;
+}
+
+.selecao-pre-upload input{
+  display: none;
+}
+
+#previewContainerId{
+
+}
+
+#previewContainerId img{
+  width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 16px;
+}
