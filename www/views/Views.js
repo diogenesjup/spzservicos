@@ -437,7 +437,7 @@ class Views{
                         <div class="col-12 wow fadeInLeft" data-wow-delay="0.0s" data-wow-duration="0.3s">
                            
                            <h2>
-                           <a href="javascript:void(0)" title="Voltar" onclick="app.viewPrincipalProfissional();">
+                           <a href="javascript:void(0)" title="Voltar" onclick="app.verTodosAnuncios();">
                               <img src="assets/images/voltar-views.svg" alt="Voltar" />
                            </a> 
                            Promova o seu anúncio para ele ser exibido para os usuários da nossa plataforma!</h2>
@@ -1054,7 +1054,7 @@ class Views{
 
                      <div class="loop-novos-servicos" id="listaDeOrcamentos">
 
-                            <p style="text-align:center;">
+                            <p style="text-align:center;display:none;">
                                 <img src="assets/images/loading.gif" alt="Carregando" style="width: 15px;height:auto;" />
                             </p>
 

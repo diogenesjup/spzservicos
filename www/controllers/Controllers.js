@@ -511,13 +511,13 @@ filtrotabela(){
         // SALVAR DETALHE DO ANÚNCIO
         localStorage.setItem("anuncioHeranca",anuncio);
 
-        if(saldoUsuario<valorAnuncio){
+        if(parseFloat(saldoUsuario)<parseFloat(valorAnuncio)){
         
-            confirmacao("Oops! Você não tem chaves suficiêntes","Quer enviar um orçamento para esse cliente? Compre agora um pacote de chaves para desbloquear essa e muitos outros anúncios!","app.comprarChaves()","Comprar");
+            confirmacao("Oops! Você não tem Keys suficiêntes","Quer enviar um orçamento para esse cliente? Compre agora um pacote de Keys para desbloquear essa e muitos outros anúncios!","app.comprarChaves()","Comprar");
         
         }else{
 
-            confirmacao("Tem certeza que deseja desbloquear esse anúncio?",`Será debitado um valor de ${valorAnuncio} chaves do seu saldo <b>SERVICE KEYS</b>`,`app.views.viewDetalheAnuncio(${anuncio},5)`,"Desbloquear");
+            confirmacao("Tem certeza que deseja desbloquear esse anúncio?",`Será debitado um valor de ${valorAnuncio} Keys do seu saldo <b>SPZ SERVIÇOS</b>`,`app.views.viewDetalheAnuncio(${anuncio},5)`,"Desbloquear");
 
         }
 
@@ -578,8 +578,14 @@ filtrotabela(){
         $("#btnComprarSelecionado").html("Carregando....");
 
         // SELECIONAR O VALOR DE ACORDO COM A ESCOLHA
-        this.models.selecaoPlanosAnuncios(id_anuncio, pacoteEscolhido);
-
+        // PAGAR COM PAGAMENTO DIRETO
+        if(localStorage.getItem("forma_cobranca_anuncios")!="Pagamento usando chaves"){
+            this.models.selecaoPlanosAnuncios(id_anuncio, pacoteEscolhido);
+        // PAGAR USANDO CHAVES
+        }else{
+            this.models.selecaoPlanosAnunciosComChaves(id_anuncio, pacoteEscolhido);
+        }
+        
         // DIRECIONAR PARA A TELA DE COMPRA DO PACOTE
         //this.views.paginaDeCmopra();
 

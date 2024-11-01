@@ -169,7 +169,7 @@ $(document).ready(function() {
 // ABRIR URL`s EXTERNAS`
 function abrirUrl(url){
 
-  cordova.InAppBrowser.open(url, '_blank', 'location=yes,hidden=no,hardwareback=no');
+  cordova.InAppBrowser.open(url, '_system', 'location=yes,hidden=no,hardwareback=no');
 
 }
 

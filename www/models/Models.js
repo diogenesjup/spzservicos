@@ -644,6 +644,10 @@ verTodosAnuncios(){
 
               `);
 
+              if(dados.anuncios.length==0){
+                $("#listaOpcoesMeusAnuncios").html(`<p style="font-size:13px;text-align:center;padding-top:24px;">Nenhum anúncio cadastrado ainda</p>`);
+              }
+
             }else{
               
                 console.log("SEM SUCESSO verTodosAnuncios()");
@@ -1353,6 +1357,7 @@ pacoteChaves(){
               // SALVAR NA MEMÓRIA
               localStorage.setItem("pacotes",JSON.stringify(dados.pacotes));
               localStorage.setItem("promover_anuncios",JSON.stringify(dados.promover_anuncios));
+              localStorage.setItem("forma_cobranca_anuncios",dados.forma_de_cobranca);
 
               $("#appendPacotes").html(`
 
@@ -1571,6 +1576,19 @@ planosPromocoes(){
                 // SALVAR NA MEMÓRIA
                 localStorage.setItem("pacotes",JSON.stringify(dados.pacotes));
                 localStorage.setItem("promover_anuncios",JSON.stringify(dados.promover_anuncios));
+                localStorage.setItem("forma_cobranca_anuncios",dados.forma_de_cobranca);
+
+                var var1 = `À vista por R$${dados.promover_anuncios.valor_destaque_principal_global.replace(".",",")}`;
+                var var2 = `À vista por R$${dados.promover_anuncios.valor_destaque_principal_categoria.replace(".",",")}`;
+                var var3 = `À vista por R$${dados.promover_anuncios.valor_destaque_comum_interno.replace(".",",")}`;
+
+                if(dados.forma_de_cobranca=="Pagamento usando chaves"){
+
+                  var var1 = `${dados.promover_anuncios.valor_destaque_principal_global.replace(".",",")} Keys`;
+                  var var2 = `${dados.promover_anuncios.valor_destaque_principal_categoria.replace(".",",")} Keys`;
+                  var var3 = `${dados.promover_anuncios.valor_destaque_comum_interno.replace(".",",")} Keys`;
+
+                }
                 
                 $("#appendPacotes").html(`
 
@@ -1580,7 +1598,7 @@ planosPromocoes(){
                         <label class="form-check-label" for="pacote1">
                            Destaque principal
                            <small>Seu anúncio será exibido na página principal do aplicativo, durante ${dados.promover_anuncios.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
-                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">À vista por R$${dados.promover_anuncios.valor_destaque_principal_global.replace(".",",")}</small>
+                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">${var1}</small>
                         </label>
                     </div>
                     <!-- PACOTE PROMOÇÃO ANUNCIO --> 
@@ -1591,7 +1609,7 @@ planosPromocoes(){
                         <label class="form-check-label" for="pacote2">
                            Destaque na categoria
                            <small>Seu anúncio será exibido na página principal da mesma categoria que você pertence, durante ${dados.promover_anuncios.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
-                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">À vista por R$${dados.promover_anuncios.valor_destaque_principal_categoria.replace(".",",")}</small>
+                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">${var2}</small>
                         </label>
                     </div>
                     <!-- PACOTE PROMOÇÃO ANUNCIO --> 
@@ -1602,7 +1620,7 @@ planosPromocoes(){
                         <label class="form-check-label" for="pacote3">
                            Banner comum interno
                            <small>Seu anúncio será exibido na página de criação de anúncios, com menos destaques, durante ${dados.promover_anuncios.duracao_de_dias_de_ativacao_do_anuncio} dias</small>
-                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">À vista por R$${dados.promover_anuncios.valor_destaque_comum_interno.replace(".",",")}</small>
+                           <small style="font-weight: bold;padding-top: 8px;font-size: 14px;color: #8BC34A;">${var3}</small>
                         </label>
                     </div>
                     <!-- PACOTE PROMOÇÃO ANUNCIO --> 
@@ -1665,7 +1683,126 @@ planosPromocoes(){
           
         `);
 
-  }
+}
+
+
+
+
+selecaoPlanosAnunciosComChaves(id_anuncio, pacoteEscolhido){
+
+       jQuery("#btnComprarSelecionado").html("Comprar selecionado");
+
+
+      localStorage.setItem("idAnuncioPromocao",id_anuncio);
+      localStorage.setItem("pacoteEscolhido",pacoteEscolhido);
+
+      var planos     = JSON.parse(localStorage.getItem("promover_anuncios"));
+      var nomePlano  = "";
+      var precoPlano = "";
+
+      
+
+      if(pacoteEscolhido==3){
+          nomePlano = "Destaque global";
+          precoPlano = planos.valor_destaque_comum_interno;
+      }
+      if(pacoteEscolhido==2){
+          nomePlano = "Destaque na categoria";
+          precoPlano = planos.valor_destaque_principal_categoria;
+      }
+      if(pacoteEscolhido==1){
+          nomePlano = "Destaque comum simples";
+          precoPlano = planos.valor_destaque_principal_global;
+      }
+
+      console.log(precoPlano);
+      console.log(pacoteEscolhido);
+
+      var saldoUsuario = localStorage.getItem("saldoPrestadorServico");
+        
+      // SALVAR DETALHE DO ANÚNCIO
+      localStorage.setItem("anuncioHeranca",id_anuncio);
+
+      if(parseFloat(saldoUsuario)<parseFloat(precoPlano)){
+        
+        confirmacao("Oops! Você não tem Keys suficiêntes","Quer promover o seu anúncio? Compre agora um pacote de Keys para promover esse e muitos outros anúncios!","app.comprarChaves()","Comprar");
+    
+    }else{
+
+        confirmacao("Tem certeza que deseja promover esse anúncio?",`Será debitado um valor de <b>${precoPlano} Keys</b> do seu saldo <b>SPZ SERVIÇOS</b>`,`app.models.promoverAnuncioComChaves(${precoPlano})`,"Promover");
+
+    }
+     
+      
+
+}
+
+promoverAnuncioComChaves(precoPlano){
+
+            var idUsuario    = localStorage.getItem("idUsuario");
+            var anuncio      = localStorage.getItem("anuncioHeranca");
+            var saldoUsuario = localStorage.getItem("saldoPrestadorServico");
+            var pacoteEscolhido = localStorage.getItem("pacoteEscolhido");
+
+            // ATUALIZAR O SALDO DO USUÁRIO
+            var saldoAtual = saldoUsuario - precoPlano;
+            localStorage.setItem("saldoPrestadorServico",saldoAtual);
+            $("#saldoAtualUsuarioHeader").html(saldoAtual);
+
+            // CONFIGURAÇÕES AJAX VANILLA
+            let xhr = new XMLHttpRequest();
+                
+            xhr.open('POST', app.urlApi+'payAnuncioWithKeys',true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            var params = 'idUsuario='+idUsuario+
+                        "&token="+app.token+
+                        "&tokenSms="+app.tokenSms+
+                        "&anuncio="+anuncio+
+                        "&precoPlano="+precoPlano+
+                        "&pacoteEscolhido="+pacoteEscolhido;
+            
+            // INICIO AJAX VANILLA
+            xhr.onreadystatechange = () => {
+
+              if(xhr.readyState == 4) {
+
+                if(xhr.status == 200) {
+
+                  console.log("RETORNO PAGAMENTO ANUNCIO COM CHAVES 2: ");
+                  //console.log(xhr.responseText);
+                  console.log(JSON.parse(xhr.responseText));
+
+                  var dados = JSON.parse(xhr.responseText);
+
+                  if(dados.sucesso==200){
+
+                    app.viewPrincipalProfissional();
+                    aviso("Deu certo!","O seu anúncio foi promovido com sucesso e irá ser exibido aos usuários da plataforma em breve.");
+                      
+                  }else{
+                      aviso("Oops! Algo deu errado","Tente novamente dentro de alguns minutos.");
+                      app.viewPrincipalProfissional();
+                  }
+
+                }else{
+                  
+                  console.log("SEM SUCESSO promoverAnuncioComChaves()");
+                  console.log(xhr.responseText);
+
+                  aviso("Oops! Algo deu errado","Tente novamente em alguns minutos.");
+
+                }
+
+              }
+          }; // FINAL AJAX VANILLA
+
+          /* EXECUTA */
+          xhr.send(params);
+
+}
+
+
 
 
 payBoleto(){
