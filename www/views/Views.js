@@ -44,6 +44,13 @@ class Views{
                                 <img src="assets/images/simbolo.svg" alt="Encontrar profissionais" />  Cadastrar meus serviços
                               </label>
                            </div>
+
+                           <div class="form-check" onclick="app.meusAnuncios();">
+                              <input class="form-check-input" type="radio" name="tipoPerfil" id="tipoServicoPro" value="profissionais">
+                              <label class="form-check-label" for="tipoServicoPro">
+                                <img src="assets/images/simbolo.svg" alt="Anunciar aqui" />  Anunciar aqui
+                              </label>
+                           </div>
                            
                            <div class="form-group">
                               <button typw="submit" class="btn btn-primary">
@@ -2607,6 +2614,12 @@ class Views{
                         </div>
                         
                      </form>
+
+                     <div class="form-group link-apoio text-center" style="padding-top:13px;">
+                            <a href="javascript:void(0)" title="Versão 1.3.2" style="text-decoration:none;font-size:13px;color:#747474;">
+                                Versão 1.3.2
+                            </a>
+                          </div>
                      
                      <!--
                        <div class="form-group link-apoio text-center">
