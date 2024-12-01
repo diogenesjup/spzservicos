@@ -16,21 +16,22 @@ class App {
 
         if(ambiente=="HOMOLOGACAO"){
              
-            this.urlDom = "http://127.0.0.1:8080/services-keys/public_html/app/app/www/";
-            this.urlApi = "http://127.0.0.1:8080/services-keys/public_html/app/api/";
-            this.urlCdn = "http://127.0.0.1:8080/services-keys/public_html/app/cdn/";
-
-        }
-        if(ambiente=="PRODUCAO"){
-
             this.urlDom = "https://servidorseguro.cloud/spz-servicos/app/www/";
             this.urlApi = "https://servidorseguro.cloud/spz-servicos/apiservicekeys/";
             this.urlApiAjax = "https://servidorseguro.cloud/spz-servicos/wp-admin/";
             this.urlCdn = "https://servidorseguro.cloud/spz-servicos/cdn/";
 
         }
+        if(ambiente=="PRODUCAO"){
 
-        this.urlApiPagto = "https://servidorseguro.cloud/spz-servicos/pay/";
+            this.urlDom     = "https://spzservicos.com/app/www/";
+            this.urlApi     = "https://spzservicos.com/apiservicekeys/";
+            this.urlApiAjax = "https://spzservicos.com/wp-admin/";
+            this.urlCdn     = "https://spzservicos.com/cdn/";
+
+        }
+
+        this.urlApiPagto = "https://spzservicos.com/pay/";
 
         this.token = token;
         this.tokenSms = tokenSms;
@@ -523,7 +524,7 @@ filtrotabela(){
 
     }else{
 
-          aviso("Oops! Você não pode atender a esse orçamento","Suas categorias de atendimento não permitem atender a esse tipo de orçamento. Para alterar as suas categorias de atendimento, envie um e-mail para <b>suporte@servicekeys.com.br</b>");  
+          aviso("Oops! Você não pode atender a esse orçamento","Suas categorias de atendimento não permitem atender a esse tipo de orçamento. Para alterar as suas categorias de atendimento, envie um e-mail para <b>contato@spzservicos.com</b>");  
 
     }
         
