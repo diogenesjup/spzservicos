@@ -66,7 +66,10 @@ class Models{
 
                      localStorage.setItem("dadosUsuario",dadosUsuario.dados);
                      
+                     localStorage.setItem("categoria1",dados.categoria);
+                     localStorage.setItem("categoria2",dados.categoria_2);
                      
+                     localStorage.setItem("dadosCompletosUsuario",JSON.stringify(dados));
 
                      localStorage.setItem("nomeUsuario",dados.nome);
 
