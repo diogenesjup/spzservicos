@@ -160,6 +160,9 @@ class Views{
                      <div class="col-12 wow fadeInUp" data-wow-delay="0.0s" data-wow-duration="0.3s">
                         
                         <h2>
+                           <a href="javascript:void(0)" title="Voltar" onclick="app.viewPrincipalProfissional();">
+                              <img src="assets/images/voltar-views.svg" alt="Voltar" />
+                           </a> 
                            Anuncie na SPZ Serviços!
                         </h2>
                         <p>
@@ -176,6 +179,8 @@ class Views{
                               </p>
 
                         </div>
+
+                        
 
                      </div>
                   </div>
@@ -222,7 +227,11 @@ class Views{
 
                   jQuery("#opcoesMeusAnuncios").html(`
 
-                     <h3>Criar novo anúncio:</h3>
+                     <h3>
+                     <a href="javascript:void(0)" title="Voltar" onclick="app.meusAnuncios();">
+                        <img src="assets/images/voltar-views.svg" alt="Voltar" />
+                     </a> 
+                     Criar novo anúncio:</h3>
                      
                      <form 
                         id="formNewAnuncio" 
@@ -444,7 +453,7 @@ class Views{
                         <div class="col-12 wow fadeInLeft" data-wow-delay="0.0s" data-wow-duration="0.3s">
                            
                            <h2>
-                           <a href="javascript:void(0)" title="Voltar" onclick="app.verTodosAnuncios();">
+                           <a href="javascript:void(0)" title="Voltar" onclick="app.meusAnuncios();">
                               <img src="assets/images/voltar-views.svg" alt="Voltar" />
                            </a> 
                            Promova o seu anúncio para ele ser exibido para os usuários da nossa plataforma!</h2>
@@ -856,6 +865,17 @@ class Views{
                        Olá novamente,<br>${localStorage.getItem("nomeCompletoUsuario")}<br>
                        <small>Novos orçamentos da rede <br>SPZ SERVIÇOS:</small>
                      </h2>
+
+                      <div class="filtro-categorias">
+
+                        <label class="switch">
+                           <input type="checkbox" id="toggleSwitch" onchange="filtrarCategorias();">
+                           <span class="slider round"></span>
+                        </label> 
+
+                        Exibir apenas orçamentos das minhas categorias
+
+                     </div>
 
                      <div class="loop-novos-servicos" id="listaDeOrcamentos">
 
@@ -1544,9 +1564,13 @@ class Views{
                                         >${payload}</textarea>
                                     </div>
                                     <p style="text-align:center">
-                                       <a href="" onclick="copiarCodigoPix()" style="color: #666;text-decoration: underline;display: block;padding-top: 12px;" title="Copiar código PIX">
+                                       <span 
+                                          onclick="copiarCodigoPix()" 
+                                          style="color: #666;text-decoration: underline;display: block;padding-top: 12px;display:block;text-align:center;" 
+                                          title="Copiar código PIX"
+                                       >
                                           Copiar código PIX
-                                       </a>
+                                       </span>
                                     </p>
 
                                   <!--
@@ -2616,8 +2640,8 @@ class Views{
                      </form>
 
                      <div class="form-group link-apoio text-center" style="padding-top:13px;">
-                            <a href="javascript:void(0)" title="Versão 1.3.2" style="text-decoration:none;font-size:13px;color:#747474;">
-                                Versão 1.4.3
+                            <a href="javascript:void(0)" title="Versão 1.4.4" style="text-decoration:none;font-size:13px;color:#747474;">
+                                Versão 1.4.4
                             </a>
                           </div>
                      

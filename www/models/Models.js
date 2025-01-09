@@ -613,6 +613,19 @@ verTodosAnuncios(){
                   </ul>
                 </nav>
 
+                        <!-- ACTIONS NOVOS ANUNCIOS -->
+                        <div class="actions-novos-anuncios">
+                           <p>
+                              <a href="javascript:void(0)" title="Criar novo anúncio" onclick="app.criarNovoAnuncio()">
+                                    Criar novo anúncio
+                              </a>
+                           </p>
+                           <button onclick="app.viewPrincipalProfissional();">
+                              Voltar para o ínicio
+                           </button>
+                        </div>
+                        <!-- ACTIONS NOVOS ANUNCIOS -->
+
              `);
 
               $("#listaOpcoesMeusAnuncios").html(`
@@ -678,8 +691,14 @@ verTodosAnuncios(){
             return anuncio.id_anuncio == idAnuncio;
         });
 
-        jQuery("#titulo").html(`<small>Ver anúncio</small><br>${anuncio.titulo}`);
-        jQuery("#subtitulo").html(`Você pode editar, excluir, ou <strong>PROMOVER</strong> o seu anúncio:`);
+        jQuery("#titulo").html(`
+
+          <a href="javascript:void(0)" title="Voltar" onclick="app.meusAnuncios();">
+             <img src="assets/images/voltar-views.svg" alt="Voltar" />
+          </a> 
+          
+          <small>Ver anúncio</small><br>${anuncio.titulo}`);
+          jQuery("#subtitulo").html(`Você pode editar, excluir, ou <strong>PROMOVER</strong> o seu anúncio:`);
 
         var htmlAnuncio = `<span class="status-anuncio" style="position: absolute;display: block;right: -8px;top: -8px;z-index: 9;">INATIVO</span>`;
 
@@ -764,7 +783,11 @@ verTodosAnuncios(){
         return anuncio.id_anuncio == idAnuncio;
     });
 
-    jQuery("#titulo").html(`<small>Editar anúncio</small><br>${anuncio.titulo}`);
+    jQuery("#titulo").html(`
+      <a href="javascript:void(0)" title="Voltar" onclick="app.verTodosAnuncios();">
+        <img src="assets/images/voltar-views.svg" alt="Voltar" />
+      </a> 
+      <small>Editar anúncio</small><br>${anuncio.titulo}`);
     jQuery("#subtitulo").html(`Atualize as informações do seu anúncio:`);
 
     var htmlAnuncio = `<span class="status-anuncio" style="position: absolute;display: block;right: -8px;top: -8px;z-index: 9;">INATIVO</span>`;

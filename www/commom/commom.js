@@ -1,4 +1,43 @@
-           // GERENCIANET TOKEN
+
+// Função para filtrar as categorias
+function filtrarCategorias() {
+
+  // Pegando os valores de categoria1 e categoria2 da localStorage
+let categoria1 = localStorage.getItem('categoria1'); // Supondo que os valores estão salvos como string na localStorage
+let categoria2 = localStorage.getItem('categoria2');
+
+
+   let isChecked = document.getElementById('toggleSwitch').checked;
+
+   // Seleciona todas as divs .caixa-destaque-servicos
+   let divs = document.querySelectorAll('.caixa-destaque-servicos');
+
+   // Se o switch estiver ativado
+   if (isChecked) {
+       divs.forEach(function(div) {
+           let categoria = div.getAttribute('data-categoria');
+
+           // Verifica se a categoria da div é igual a categoria1 ou categoria2
+           if (categoria === categoria1 || categoria === categoria2) {
+               div.style.display = 'block'; // Exibe a div
+           } else {
+               div.style.display = 'none'; // Oculta a div
+           }
+       });
+   } else {
+       // Se o switch estiver desativado, todas as divs ficam visíveis
+       divs.forEach(function(div) {
+           div.style.display = 'block'; // Exibe todas as divs
+       });
+   }
+}
+
+// Adiciona o evento ao switch para detectar quando ele for ativado/desativado
+//document.getElementById('toggleSwitch').addEventListener('change', filtrarCategorias);
+
+
+
+// GERENCIANET TOKEN
            $gn.ready(function(checkout) {
  
               var callback = function(error, response) {
