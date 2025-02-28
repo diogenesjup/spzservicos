@@ -4,7 +4,7 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.diogenesjunior.spzservicos"
-        version   = "1.4.4">
+        version   = "1.4.5">
 
         <!-- LEMBRAR DE MUDAR O APP ID ANTES DE SUBIR O APP NAS LOJAS -->
 
@@ -33,9 +33,10 @@
     <preference name="disable-cursor" value="false" />
     <preference name="android-installLocation" value="auto" />
     <preference name="StatusBarBackgroundColor" value="#000" />
-    <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="SplashScreen" value="none" />
-    <preference name="ShowSplashScreen" value="false" />
+    
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/assets/images/icones/1024x1024.png" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#000" />
+    
     <preference name="android-minSdkVersion" value="29" />
     <preference name="android-targetSdkVersion" value="34" />
     <preference name="AndroidXEnabled" value="true" />

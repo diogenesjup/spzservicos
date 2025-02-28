@@ -37,22 +37,6 @@ let categoria2 = localStorage.getItem('categoria2');
 
 
 
-// GERENCIANET TOKEN
-           $gn.ready(function(checkout) {
- 
-              var callback = function(error, response) {
-                if(error) {
-                  // Trata o erro ocorrido
-                  console.error(error);
-                } else {
-                  // Trata a resposta
-                  console.log(response);
-                }
-              }; 
-
-           });
-
-
             // COMO FAZER A CHAMADA NO FORMULÁRIO onSubmit="return ajaxSubmit(this);"
             var ajaxSubmit = function(form) {
                 // fetch where we want to submit the form to
@@ -671,6 +655,8 @@ function anuncios(posicao){
 
 
   var html = ``;
+
+
   var faca = `
 
                      <!-- ANUNCIOS -->
@@ -707,12 +693,10 @@ function anuncios(posicao){
 
     anuncios_ativos.forEach(function(anuncio) {
       if(anuncio.plano=='1'){
-        tem = 2;
-      html = `
 
-                     <!-- ANUNCIOS -->
-                     <div class="area-anuncios" id="areaAnuncios">
-                              <h1>Anúncios:</h1>
+
+        //tem = 2;
+      html = html + `
 
                               <!-- ANUNCIO -->
                               <div class="anuncio">
@@ -735,8 +719,8 @@ function anuncios(posicao){
                               </div>
                               <!-- ANUNCIO -->
 
-                     </div>
-                     <!-- ANUNCIOS -->
+                    
+                              
   
             `;
       }
@@ -749,13 +733,10 @@ function anuncios(posicao){
 
     anuncios_ativos.forEach(function(anuncio) {
       if(anuncio.plano=='2'){
-        tem = 2;
-      html = `
+        //tem = 2;
+      html = html + `
 
-                     <!-- ANUNCIOS -->
-                     <div class="area-anuncios" id="areaAnuncios">
-                              <h1>Anúncios:</h1>
-
+              
                               <!-- ANUNCIO -->
                               <div class="anuncio">
                                  <div class="row">
@@ -777,8 +758,8 @@ function anuncios(posicao){
                               </div>
                               <!-- ANUNCIO -->
 
-                     </div>
-                     <!-- ANUNCIOS -->
+                    
+                              
   
             `;
       }
@@ -790,14 +771,7 @@ function anuncios(posicao){
   
   if(plano=="3"){
 
-    html = `
-
-                     <!-- ANUNCIOS -->
-                     <div class="area-anuncios" id="areaAnuncios">
-                              <h1>Anúncios:</h1>
-    
-    `;
-
+   
     anuncios_ativos.forEach(function(anuncio) {
 
       if(anuncio.plano=='3'){
@@ -835,16 +809,10 @@ function anuncios(posicao){
 
         });
 
-   
-
-    html = html + `
-    
-          </div>
-          <!-- ANUNCIOS -->
-    
-    `;
-
+  
   } 
+
+      
  
  return html;
 

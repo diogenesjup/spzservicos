@@ -90,7 +90,27 @@ class Views{
 
             `);
 
-            var htmlAnuncios = anuncios("1");
+                var htmlAnuncios = htmlAnuncios = `
+
+                              <!-- ANUNCIOS -->
+                              <div class="area-anuncios" id="areaAnuncios">
+                                       <h1>Anúncios:</h1>
+
+               `;
+
+                                    htmlAnuncios += anuncios("1");
+                                    htmlAnuncios += anuncios("2");
+                                    htmlAnuncios += anuncios("3");
+
+                           htmlAnuncios = htmlAnuncios + `
+                  
+                              </div>
+                              <!-- ANUNCIOS -->
+
+                            
+                              
+
+                           `;
 
             this._content.html(`
             
@@ -113,8 +133,6 @@ class Views{
                      </h2>
 
 
-                     ${htmlAnuncios}
-
                      <nav>
                        <ul id="listaDeCategorias">
                          
@@ -124,6 +142,8 @@ class Views{
                          
                        </ul>
                      </nav>
+
+                     ${htmlAnuncios}
 
 
                   </div>
@@ -694,7 +714,27 @@ class Views{
        console.log("NOME CATEGORIA: "+nomeCategoria);
        console.log("ID CATEGORIA: "+idCategoria);
 
-       var htmlAnuncios = anuncios("3");
+       var htmlAnuncios = htmlAnuncios = `
+
+                              <!-- ANUNCIOS -->
+                              <div class="area-anuncios" id="areaAnuncios">
+                                       <h1>Anúncios:</h1>
+
+               `;
+
+                                    htmlAnuncios += anuncios("1");
+                                    htmlAnuncios += anuncios("2");
+                                    htmlAnuncios += anuncios("3");
+
+                           htmlAnuncios = htmlAnuncios + `
+                  
+                              </div>
+                              <!-- ANUNCIOS -->
+
+                            
+                              
+
+                           `;
 
        this._content.html(`
             
@@ -784,15 +824,19 @@ class Views{
 
                      ${htmlAnuncios}
 
-                     <p>&nbsp;</p>
-                     <p>&nbsp;</p>
-                     <p>&nbsp;</p>
-                     <p>&nbsp;</p>
+                     
+                     
 
 
                   </div>
                </div>
             
+            `);
+
+            app.views._content.append(`
+                     <p style="text-align:center;font-size:11px;padding-top:20px;">
+                        <a href="javascript:void(0)" onclick="app.opcoesCarretamentoPerfilCliente();" title="VOLTAR AO INÍCNIO" class="novo-btn-voltar-home">VOLTAR AO INÍCIO</a>
+                     </p>
             `);
 
             this.animarTransicao();
@@ -2641,7 +2685,7 @@ class Views{
 
                      <div class="form-group link-apoio text-center" style="padding-top:13px;">
                             <a href="javascript:void(0)" title="Versão 1.4.4" style="text-decoration:none;font-size:13px;color:#747474;">
-                                Versão 1.4.4
+                                Versão 1.4.5
                             </a>
                           </div>
                      

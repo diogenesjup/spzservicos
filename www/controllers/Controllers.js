@@ -262,7 +262,7 @@ class App {
 
         app.views._content.append(`
                 <p style="text-align:center;font-size:11px;padding-top:20px;">
-                    <a href="javascript:void(0)" onclick="app.opcoesCarretamentoPerfilCliente();" title="VOLTAR AO INÍCNIO" style="color:#747474;text-decoration:none;">VOLTAR AO INÍCIO</a>
+                    <a href="javascript:void(0)" onclick="app.opcoesCarretamentoPerfilCliente();" title="VOLTAR AO INÍCNIO" class="novo-btn-voltar-home">VOLTAR AO INÍCIO</a>
                 </p>
         `);
 

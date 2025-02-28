@@ -452,6 +452,7 @@ section#content .view-3{
 .fechar-menu-cliente a img{
   width: 22px;
   height: auto;
+  filter:grayscale(1);
 }
 
 
@@ -529,6 +530,7 @@ section#content .view-3{
 .fechar-menu-profissional a img{
   width: 22px;
   height: auto;
+  filter: grayscale(1);
 }
 
 
@@ -554,7 +556,7 @@ section#content .view-3{
   font-weight: 300;
   font-size: 26px;
   line-height: 33px;
-  margin-bottom: 20px;
+  margin-bottom: -26px;
 }
 
 .view-profissional{
@@ -841,9 +843,12 @@ section#content .view-3{
 
 
 .busca-principal{
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    margin-bottom: 26px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-radius: 20px;
+  margin-bottom: 26px;
+  border: 1px solid #b7b7b7;
+  background: #fafafa;
 }
 
 .busca-principal *{
@@ -862,6 +867,7 @@ section#content .view-3{
     font-weight: 300;
     border: none !important;
     background: #FAFAFA !important;
+    border-radius: 20px;
     padding-left: 20px;
 }
 
@@ -897,13 +903,13 @@ section#content .view-3{
     border: none !important;
     outline: none !important;
     cursor: pointer;
-    border-radius: 9px !important;
+    border-radius: 20px !important;
 }
 
 .busca-principal .input-group-append{
   background: #FAFAFA !important;
-      border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+      border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 
@@ -2075,6 +2081,7 @@ nav.destaque-cursos ul li small{
     display: block;
     background: #f9f9f9;
     padding: 20px;
+    margin-top: 48px;
 }
 
 
@@ -2384,4 +2391,23 @@ span.status-anuncio{
 
 .filtro-categorias .slider.round:before {
   border-radius: 50%;
+}
+
+
+.novo-btn-voltar-home,
+.novo-btn-voltar-home:hover{
+    background: #ffff00;
+    color: #000;
+    border-radius: 25px;
+    border: 1px solid #000;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 202px;
+    margin-bottom: 60px;
 }
