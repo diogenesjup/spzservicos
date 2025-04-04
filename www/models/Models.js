@@ -2974,6 +2974,48 @@ minhasSolicitacoes(){
                           // ORCAMENTO DESDESBLOQUEADO
                           if(n.desblock=="sim"){
 
+                              let profissionaisHtml = '';
+
+                              if (n.historicos && n.historicos.length > 0) {
+                                profissionaisHtml = `
+                                  <div class="profissionais-container">
+                                    <h5>Profissionais que desbloquearam este serviço:</h5>
+                                    <div class="lista-profissionais">
+                                      ${n.historicos.map((profissional, index) => {
+                                        if (profissional.id_profissional) {
+                                          // Verificar se já tem avaliação
+                                          const temAvaliacao = profissional.estrelas_profissional && profissional.estrelas_profissional !== '';
+                                          const estrelas = temAvaliacao ? parseInt(profissional.estrelas_profissional) : 0;
+                                          const comentario = profissional.avaliacao || '';
+                                          
+                                          return `
+                                            <div class="profissional-item">
+                                              <div class="profissional-info">
+                                                <div class="profissional-nome">${profissional.nome_profissional || 'Profissional'}</div>
+                                                <div class="profissional-nota">
+                                                  ${temAvaliacao ? 
+                                                    `<div class="avaliacao-feita">
+                                                      ${app.exibirAvaliacaoFeita(estrelas)}
+                                                      <span class="nota-texto">${estrelas}/5</span>
+                                                     </div>
+                                                     ${comentario ? `<div class="comentario-avaliacao">"${comentario}"</div>` : ''}` 
+                                                    : 
+                                                    `<button onclick="renderizarModalAvaliacao('${profissional.id_profissional}', '${profissional.nome_profissional || 'Profissional'}', ${n.id})" class="btn btn-sm btn-primary">
+                                                      Avaliar Profissional <i class="fa fa-star"></i>
+                                                     </button>`
+                                                  }
+                                                </div>
+                                              </div>
+                                            </div>
+                                          `;
+                                        }
+                                        return '';
+                                      }).join('')}
+                                    </div>
+                                  </div>
+                                `;
+                              }
+
                               return `
                                   
                                  <!-- CAIXA DESTAQUE SERVIÇOS -->
@@ -2991,17 +3033,20 @@ minhasSolicitacoes(){
                                           <p>Data: ${n.data_criacao}</p>
                                           <p><b>Requisitos:</b> ${n.requisitos}</p>
                                           <p>Desbloqueado por algum profissional?<br> <b style="color:#4CAF50">Sim</b></p>
+
+                                          ${profissionaisHtml}
+
                                      </div>
 
                                      <div class="footer-autor">
-                                          <a href="javascript:void(0)" onclick="app.fecharAnuncio(${n.id});" title="FECHAR SERVIÇO" class="btn btn-warning">
-                                              FECHAR SERVIÇO
+                                          <a href="javascript:void(0)" onclick="app.fecharAnuncio(${n.id});" title="FINALIZAR SERVIÇO" class="btn btn-warning">
+                                              FINALIZAR SERVIÇO
                                           </a>
                                           <p class="apoio-servico">
-                                            Caso já tenha sido atendido ou não precise mais de novos orçamentos, o botão acima irá indicar aos profissionais que vocë não precisa mais do atendimento.
+                                              Caso já tenha sido atendido ou não precise mais de novos orçamentos, o botão acima irá indicar aos profissionais que vocë não precisa mais do atendimento.
                                           </p>
                                           <p class="apoio-servico">
-                                            Caso precise editar alguma informação, você precisa criar uma nova solicitação de atendimento
+                                              Caso precise editar alguma informação, você precisa criar uma nova solicitação de atendimento
                                           </p>
                                      </div>
 
@@ -3033,6 +3078,57 @@ minhasSolicitacoes(){
       /* EXECUTA */
       xhr.send(params);
   
+
+}
+
+salvarAvaliacao(idProfissional, estrelas, comentario, idAnuncio){
+    
+        console.log(idProfissional);
+        console.log(estrelas); 
+        console.log(idAnuncio);
+        console.log(comentario); 
+
+        var idUsuario  = localStorage.getItem("idUsuario");
+
+        // CONFIGURAÇÕES AJAX VANILLA
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('POST', app.urlApi+'salvar-avaliacao',true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        var params = 'idUsuario='+idUsuario+ 
+                    '&idProfissional='+idProfissional+
+                    '&estrelas='+estrelas+
+                    '&idAnuncio='+idAnuncio+
+                    '&comentario='+comentario+
+                    "&token="+app.token;
+        
+        // INICIO AJAX VANILLA
+        xhr.onreadystatechange = () => {
+
+          if(xhr.readyState == 4) {
+
+            if(xhr.status == 200) {
+
+                console.log("RETORNO SALVAR AVALIAÇÃO");
+                console.log(JSON.parse(xhr.responseText));
+
+                $('#modalAvaliacao').hide();
+                aviso("Avaliação enviada!","A sua avaliação sobre esse profissional foi enviada com sucesso!");
+              
+            }else{
+              
+                console.log("SEM SUCESSO salvarAvaliacao()");
+                console.log(JSON.parse(xhr.responseText));
+                //aviso("Oops! Algo deu errado.","Nossos servidores estão passando por dificuldades, tente novamente em alguns minutos.");
+
+            }
+
+          }
+      }; // FINAL AJAX VANILLA
+
+      /* EXECUTA */
+      xhr.send(params);
 
 }
 

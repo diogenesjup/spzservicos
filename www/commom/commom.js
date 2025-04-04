@@ -1,3 +1,120 @@
+function renderizarModalAvaliacao (idProfissional, nomeProfissional, idAnuncio) {
+
+  // Criar ou atualizar o modal de avaliação
+  if (!$('#modalAvaliacao').length) {
+    $('body').append(`
+      <div id="modalAvaliacao" class="modal-avaliacao">
+        <div class="modal-avaliacao-content">
+          <span class="modal-avaliacao-close">&times;</span>
+          <h2>Avalie o profissional</h2>
+          <div id="conteudoModalAvaliacao"></div>
+        </div>
+      </div>
+    `);
+    
+    // Adicionar evento para fechar o modal
+    $('.modal-avaliacao-close').on('click', function() {
+      $('#modalAvaliacao').hide();
+    });
+    
+    // Fechar modal quando clicar fora da área do modal
+    $(window).on('click', function(event) {
+      if ($(event.target).is('#modalAvaliacao')) {
+        $('#modalAvaliacao').hide();
+      }
+    });
+  }
+  
+  // Populando o conteúdo do modal
+  $('#conteudoModalAvaliacao').html(`
+    <div class="avaliacao-profissional">
+      <h3>${nomeProfissional}</h3>
+      <div class="rating">
+        <span class="rating-title">Selecione uma nota:</span>
+        <div class="estrelas">
+          <span class="estrela" data-valor="1">★</span>
+          <span class="estrela" data-valor="2">★</span>
+          <span class="estrela" data-valor="3">★</span>
+          <span class="estrela" data-valor="4">★</span>
+          <span class="estrela" data-valor="5">★</span>
+        </div>
+        <input type="hidden" id="valorEstrelas" value="0">
+      </div>
+      <div class="form-group">
+        <label for="comentarioAvaliacao">Comentários sobre o atendimento:</label>
+        <textarea id="comentarioAvaliacao" class="form-control" rows="4" placeholder="Conte sua experiência com este profissional..."></textarea>
+      </div>
+      <button id="btnEnviarAvaliacao" class="btn btn-success">
+        Enviar Avaliação
+      </button>
+    </div>
+  `);
+  
+  // Configuração das estrelas de avaliação
+  $('.estrela').on('mouseover', function() {
+    var valor = $(this).data('valor');
+    highlightStars(valor);
+  });
+  
+  $('.estrela').on('mouseout', function() {
+    var valorAtual = $('#valorEstrelas').val();
+    highlightStars(valorAtual);
+  });
+  
+  $('.estrela').on('click', function() {
+    var valor = $(this).data('valor');
+    $('#valorEstrelas').val(valor);
+    highlightStars(valor);
+  });
+  
+  // Função para destacar estrelas
+  function highlightStars(valor) {
+    $('.estrela').removeClass('active');
+    $('.estrela').each(function() {
+      if ($(this).data('valor') <= valor) {
+        $(this).addClass('active');
+      }
+    });
+  }
+  
+  // Configurar evento para enviar avaliação
+  $('#btnEnviarAvaliacao').on('click', function() {
+    var estrelas = $('#valorEstrelas').val();
+    var comentario = $('#comentarioAvaliacao').val();
+    
+    if (estrelas == 0) {
+      alert('Por favor, selecione uma nota para o profissional.');
+      return;
+    }
+    
+    // Chamada para salvar a avaliação
+    app.models.salvarAvaliacao(idProfissional, estrelas, comentario, idAnuncio);
+    $('#modalAvaliacao').hide();
+  });
+  
+  // Mostrar o modal
+  $('#modalAvaliacao').show();
+
+}
+
+// Função para exibir as avaliações já feitas
+function exibirAvaliacaoFeita(estrelas) {
+  
+  var estrelasHtml = '';
+  
+  for (var i = 1; i <= 5; i++) {
+    if (i <= estrelas) {
+      estrelasHtml += '<span class="estrela-avaliada active">★</span>';
+    } else {
+      estrelasHtml += '<span class="estrela-avaliada">★</span>';
+    }
+  }
+  
+  return estrelasHtml;
+
+}
+
+
 
 // Função para filtrar as categorias
 function filtrarCategorias() {
